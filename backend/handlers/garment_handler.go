@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"backend/models"
 	"backend/services"
 
 	"github.com/gin-gonic/gin"

@@ -7,7 +7,7 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	
+
 	//Ruta raíz (para probar que el servidor funciona)
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -17,5 +17,4 @@ func RegisterRoutes(r *gin.Engine) {
 
 	//Rutas de garments
 	r.GET("/garments", handlers.GetGarments)
-	r.POST("/garments", handlers.CreateGarment)
 }
