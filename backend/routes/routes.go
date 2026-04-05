@@ -2,6 +2,7 @@ package routes
 
 import (
 	"backend/handlers"
+	"backend/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,5 +17,5 @@ func RegisterRoutes(r *gin.Engine) {
 	})
 
 	//Rutas de garments
-	r.GET("/garments", handlers.GetGarments)
+	r.GET("/garments", middleware.AuthMiddleware, handlers.GetGarments)
 }
