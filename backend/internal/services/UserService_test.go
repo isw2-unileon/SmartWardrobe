@@ -1,10 +1,9 @@
 package services_test
 
 import (
+	"backend/internal/models"
+	"backend/internal/services"
 	"errors"
-	"group-15/backend/internal/models"
-	"group-15/backend/internal/repository"
-	"group-15/backend/internal/services"
 	"testing"
 
 	"golang.org/x/crypto/bcrypt"
@@ -15,7 +14,7 @@ type MockUserRepository struct {
 	MockErr  error
 }
 
-func (m *MockUserRepository) FindByUsername(username string) (*models.User, error) {
+func (m *MockUserRepository) GetByEmail(email string) (*models.User, error) {
 	return m.MockUser, m.MockErr
 }
 
@@ -40,8 +39,8 @@ func TestLogin_Success(t *testing.T) {
 
 	mockRepo := &MockUserRepository{
 		MockUser: &models.User{
-			ID:       1,
-			UserName: "test",
+			UID:      "1",
+			Email:    "test",
 			Password: hashedPassword,
 		},
 		MockErr: nil,
@@ -60,8 +59,18 @@ func TestLogin_Success(t *testing.T) {
 }
 
 func TestLogin_WrongPassword(t *testing.T) {
-	repo := repository.NewUserRepository()
-	service := services.NewUserService(repo)
+	hashValido, _ := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
+
+	mockRepo := &MockUserRepository{
+		MockUser: &models.User{
+			UID:      "1",
+			Email:    "test",
+			Password: string(hashValido),
+		},
+		MockErr: nil,
+	}
+
+	service := services.NewUserService(mockRepo)
 
 	_, err := service.Login("test", "passWrong")
 

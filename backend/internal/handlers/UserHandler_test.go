@@ -10,8 +10,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"group-15/backend/internal/dto"
-	"group-15/backend/internal/handlers"
+	"backend/internal/dto"
+	"backend/internal/handlers"
 )
 
 type MockUserService struct {
@@ -40,10 +40,13 @@ func TestUserHandler_Login_Success(t *testing.T) {
 	router.POST("/api/login", handler.Login)
 
 	loginData := dto.LoginDto{
-		UserName: "testuser",
+		Email:    "testuser@test.com",
 		Password: "123456",
 	}
-	jsonValue, _ := json.Marshal(loginData)
+	jsonValue, err := json.Marshal(loginData)
+	if err != nil {
+		t.Fatalf("Error al serializar el JSON: %v", err)
+	}
 
 	req, _ := http.NewRequest("POST", "/api/login", bytes.NewBuffer(jsonValue))
 	req.Header.Set("Content-Type", "application/json")
@@ -53,7 +56,7 @@ func TestUserHandler_Login_Success(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
-		t.Errorf("We were expecting status 200 OK, but we got: %d", w.Code)
+		t.Errorf("We were expecting status 200 OK, but we got: %d. Body: %s", w.Code, w.Body.String())
 	}
 
 	if !bytes.Contains(w.Body.Bytes(), []byte("token-jwt-falso")) {
@@ -67,6 +70,7 @@ func TestUserHandler_Login_InvalidJSON(t *testing.T) {
 
 	router := setupRouter()
 	router.POST("/api/login", handler.Login)
+
 	invalidJson := []byte(`{"userName": "testuser", password: "123"}`)
 
 	req, _ := http.NewRequest("POST", "/api/login", bytes.NewBuffer(invalidJson))
@@ -92,10 +96,13 @@ func TestUserHandler_Login_Unauthorized(t *testing.T) {
 	router.POST("/api/login", handler.Login)
 
 	loginData := dto.LoginDto{
-		UserName: "hacker",
+		Email:    "hacker",
 		Password: "wrongpassword",
 	}
-	jsonValue, _ := json.Marshal(loginData)
+	jsonValue, err := json.Marshal(loginData)
+	if err != nil {
+		t.Fatalf("Error al serializar el JSON: %v", err)
+	}
 
 	req, _ := http.NewRequest("POST", "/api/login", bytes.NewBuffer(jsonValue))
 	req.Header.Set("Content-Type", "application/json")

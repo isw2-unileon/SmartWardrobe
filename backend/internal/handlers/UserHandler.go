@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"group-15/backend/internal/dto"
+	"backend/internal/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,24 +21,23 @@ func NewUserHandler(userService UserServiceInterface) *UserHandler {
 
 // Login handles the POST /api/login route
 func (h *UserHandler) Login(c *gin.Context) {
-	var req dto.LoginDto
+	var credentials dto.LoginDto
 
-	// Validate JSON input
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid username or password format"})
+	// Decode JSON
+	if err := c.ShouldBindJSON(&credentials); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data format"})
 		return
 	}
 
-	// Call the service to perform the login
-	token, err := h.userService.Login(req.UserName, req.Password)
+	// Call the service
+	token, err := h.userService.Login(credentials.Email, credentials.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Return the token to the Frontend
+	// Respond successfully
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Login successful",
-		"token":   token,
+		"token": token,
 	})
 }
