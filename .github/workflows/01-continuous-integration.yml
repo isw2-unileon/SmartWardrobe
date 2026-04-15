@@ -45,7 +45,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: 'backend/go.mod   # Reads the version from go.mod automatically
+          go-version-file: 'backend/go.mod'   # Reads the version from go.mod automatically
 
       # ── Step 3: Verify dependencies ─────────────────────────────────────────
       # `go mod verify` checks that the module cache matches the checksums
