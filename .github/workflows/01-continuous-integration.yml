@@ -19,8 +19,7 @@
 name: 02 · Continuous Integration
 
 on:
-  push:
-    branches: [main]         # Run on every push to main
+  push:                      # Run on every push request (any branch)
   pull_request:              # Run on every pull request (any branch)
   workflow_dispatch:
 
@@ -28,6 +27,10 @@ jobs:
   test:
     name: Build & Test
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       # ── Step 1: Get the code ────────────────────────────────────────────────
@@ -42,7 +45,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod   # Reads the version from go.mod automatically
+          go-version-file: 'backend/go.mod   # Reads the version from go.mod automatically
 
       # ── Step 3: Verify dependencies ─────────────────────────────────────────
       # `go mod verify` checks that the module cache matches the checksums
