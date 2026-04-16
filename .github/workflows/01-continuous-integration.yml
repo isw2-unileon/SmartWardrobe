@@ -1,5 +1,5 @@
 # ==============================================================================
-# Workflow 02 — Continuous Integration (CI)
+# Workflow 01 — Continuous Integration (CI)
 #
 # PURPOSE: This is the CORE of CI. Every time someone pushes code or opens a
 # pull request, automatically verify that:
@@ -16,7 +16,7 @@
 #   - Job outputs & status  → Green ✅ or red ❌ on the PR page
 # ==============================================================================
 
-name: 02 · Continuous Integration
+name: 01 · Continuous Integration
 
 on:
   push:                      # Run on every push request (any branch)
