@@ -14,18 +14,23 @@ func SetupRoutes(r *gin.Engine, db *sql.DB) {
 
 	// A. Instantiate the Repository
 	userRepo := repository.NewUserRepository(db)
+	masterColorRepo := repository.NewMasterColorRepository(db)
 
 	// B. Instantiate the Service and inject the Repository
 	userService := services.NewUserService(userRepo)
+	masterColorService := services.NewMasterColorService(masterColorRepo)
 
 	// C. Instantiate the Handler and inject the Service
 	userHandler := handlers.NewUserHandler(userService)
+	masterColorHandler := handlers.NewMasterColorHandler(masterColorService)
 
 	// We group routes under /api for clean URLs
 	api := r.Group("/api")
 	{
 		// Public routes (No JWT required)
 		api.POST("/login", userHandler.Login)
+
+		api.GET("/getAllColors", masterColorHandler.GetAll)
 
 	}
 
