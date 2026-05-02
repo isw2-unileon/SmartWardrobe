@@ -1,7 +1,7 @@
 package models
 
 type MasterType struct {
-	Id         int64
+	ID         int64
 	Name       string
 	CategoryId *int64  `json:"category_id" gorm:"column:category_id"`
 	MinTemp    float64 `json:"min_temp" gorm:"column:min_temp"`
