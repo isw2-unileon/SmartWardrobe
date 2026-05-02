@@ -2,14 +2,18 @@ package services
 
 import (
 	"backend/internal/dto"
-	"backend/internal/repository"
+	"backend/internal/models"
 )
 
-type MasterColorService struct {
-	repo *repository.MasterColorRepository
+type MasterColorRepository interface {
+	GetAll() ([]models.MasterColor, error)
 }
 
-func NewMasterColorService(repo *repository.MasterColorRepository) *MasterColorService {
+type MasterColorService struct {
+	repo MasterColorRepository
+}
+
+func NewMasterColorService(repo MasterColorRepository) *MasterColorService {
 	return &MasterColorService{repo: repo}
 }
 

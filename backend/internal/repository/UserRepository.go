@@ -2,27 +2,24 @@ package repository
 
 import (
 	"backend/internal/models"
-	"database/sql"
+
+	"gorm.io/gorm"
 )
 
 // UserRepository handles database operations for users
 type UserRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-func NewUserRepository(db *sql.DB) *UserRepository {
+func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
 // FindByUserName searches for a user in the database
 func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 	user := &models.User{}
-	query := ""
 
-	err := r.db.QueryRow(query, email).Scan(&user.UID, &user.Email, &user.Password)
-	if err != nil {
-		return nil, err
-	}
+	err := r.db.Find(&user).Error
 
-	return user, nil
+	return user, err
 }

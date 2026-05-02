@@ -4,13 +4,13 @@ import (
 	"backend/internal/handlers"
 	"backend/internal/repository"
 	"backend/internal/services"
-	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // SetupRoutes set up all endpoints
-func SetupRoutes(r *gin.Engine, db *sql.DB) {
+func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	// A. Instantiate the Repository
 	userRepo := repository.NewUserRepository(db)

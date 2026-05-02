@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	// 2. Cargar el archivo .env
+	// Upload the file . env
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: Could not upload file . env, system environment variables will be used")
@@ -22,7 +22,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Database could not be started: %v", err)
 	}
-	defer db.Close()
+
+	sqlDB, err := db.DB()
+	if err == nil {
+		defer sqlDB.Close()
+	}
 
 	r := gin.Default()
 

@@ -27,7 +27,7 @@ func (s *MasterTypeService) GetAll() ([]dto.MasterTypeDto, error) {
 	var typeDtos []dto.MasterTypeDto
 	for _, c := range types {
 		typeDtos = append(typeDtos, dto.MasterTypeDto{
-			ID:   c.ID,
+			ID:   c.Id,
 			Name: c.Name,
 		})
 	}
