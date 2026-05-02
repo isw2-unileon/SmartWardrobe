@@ -1,17 +1,21 @@
 package handlers
 
 import (
-	"backend/internal/services"
+	"backend/internal/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type MasterColorHandler struct {
-	masterColorService *services.MasterColorService
+type MasterColorService interface {
+	GetAll() ([]dto.MasterColorDto, error)
 }
 
-func NewMasterColorHandler(masterColorService *services.MasterColorService) *MasterColorHandler {
+type MasterColorHandler struct {
+	masterColorService MasterColorService
+}
+
+func NewMasterColorHandler(masterColorService MasterColorService) *MasterColorHandler {
 	return &MasterColorHandler{masterColorService: masterColorService}
 }
 
