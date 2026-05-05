@@ -33,7 +33,7 @@ func main() {
 	// CORS configuration: Vital for connecting the local Frontend
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://localhost:3000"} //the frontend port
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
 	r.Use(cors.New(config))
