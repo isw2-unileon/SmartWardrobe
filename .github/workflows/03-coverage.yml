@@ -15,7 +15,11 @@ name: 03 · Test Coverage
 
 on:
   push:
+    paths:
+        - 'backend/**'
   pull_request:
+    paths:
+      - 'backend/**'
   workflow_dispatch:
 
 jobs:
