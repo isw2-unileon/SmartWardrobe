@@ -33,9 +33,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      # ── Step 1: Get the code ────────────────────────────────────────────────
+      # ── Step 1: Dowload the code ────────────────────────────────────────────
+      # Code is downloaded so that GitHub can view the folder . github.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Step 2: Get the code ────────────────────────────────────────────────
       # Called the composite action that encompasses all initial setup 
-      #in a single block.
+      # in a single block.
       - name: Setup project
         uses: ./.github/actions/setup-go-project
         with:
