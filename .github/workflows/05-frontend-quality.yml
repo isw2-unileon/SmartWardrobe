@@ -1,0 +1,65 @@
+# ==============================================================================
+# Workflow 05 — Frontend Code Quality
+#
+# PURPOSE: Enforce code style and catch bugs in the Next.js/React frontend.
+#
+# KEY CONCEPTS:
+#   - ESLint      → Catches React/JS/TS specific errors and bad practices
+#   - Prettier    → The standard formatter for web languages
+#   - npx         → Executes Node packages without needing to install them globally
+# ==============================================================================
+
+name: 05 · Frontend Code Quality
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+  pull_request:
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  # ── Job 1: ESLint ───────────────────────────────────────────────────────────
+  # Next.js comes with a great default ESLint configuration.
+  # This catches missing React dependencies, unused variables, etc.
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Frontend Project
+        uses: ./.github/actions/setup-node-project
+        with:
+          work-dir: 'frontend'
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # ── Job 2: Format check ─────────────────────────────────────────────────────
+  # Prettier enforces a consistent code style across the whole team.
+  # We use --check to fail the pipeline if a file is not formatted.
+  format:
+    name: Prettier
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Frontend Project
+        uses: ./.github/actions/setup-node-project
+        with:
+          work-dir: 'frontend'
+          install-deps: 'false'
+
+      - name: Check formatting
+        run: npx prettier --check .
