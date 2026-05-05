@@ -38,11 +38,16 @@ jobs:
   vet:
     name: go vet
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - name: Setup project
+        uses: ./.github/actions/setup-go-project
         with:
-          go-version-file: 'backend/go.mod'
+          work-dir: 'backend'
+          verify-deps: 'false'
+
       - name: Run go vet
         run: go vet ./...
 
@@ -52,11 +57,16 @@ jobs:
   format:
     name: gofmt
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - name: Setup project
+        uses: ./.github/actions/setup-go-project
         with:
-          go-version-file: 'backend/go.mod'
+          work-dir: 'backend'
+          verify-deps: 'false'
+
       - name: Check formatting
         run: |
           # gofmt -l lists files that need formatting. If any exist, fail.
@@ -77,15 +87,16 @@ jobs:
     name: golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version-file: 'backend/go.mod'
           cache: false   # golangci-lint manages its own cache below
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v9
+        uses: golangci/golangci-lint-action@v6
         with:
           version: latest
+          working-directory: backend
           # Teaching note: golangci-lint-action automatically caches the lint
           # results and binary, making repeated runs much faster.

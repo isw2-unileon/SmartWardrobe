@@ -23,12 +23,15 @@ jobs:
     name: Coverage Report
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v6
+    defaults:
+      run:
+        working-directory: ./backend
 
-      - uses: actions/setup-go@v6
+    steps:
+      - name: Setup project
+        uses: ./.github/actions/setup-go-project
         with:
-          go-version-file: 'backend/go.mod'
+          work-dir: 'backend'
 
       # ── Run tests and collect coverage data ──────────────────────────────────
       - name: Run tests with coverage
@@ -48,12 +51,12 @@ jobs:
       # download the HTML file from the GitHub Actions UI and open it in a
       # browser to see exactly which lines are covered.
       - name: Upload coverage report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: |
-            coverage.out
-            coverage.html
+            backend/coverage.out
+            backend/coverage.html
           retention-days: 7   # Keep artifacts for 7 days, then auto-delete
 
       # ── Write a summary to the GitHub Actions UI ─────────────────────────────

@@ -34,24 +34,12 @@ jobs:
 
     steps:
       # ── Step 1: Get the code ────────────────────────────────────────────────
-      # The runner starts with an EMPTY workspace. This action clones your
-      # repository so the following steps can access your code.
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      # ── Step 2: Install Go ──────────────────────────────────────────────────
-      # The runner has many tools pre-installed, but we pin the Go version
-      # so our CI always uses the same version as our go.mod specifies.
-      - name: Set up Go
-        uses: actions/setup-go@v6
+      # Called the composite action that encompasses all initial setup 
+      #in a single block.
+      - name: Setup project
+        uses: ./.github/actions/setup-go-project
         with:
-          go-version-file: 'backend/go.mod'   # Reads the version from go.mod automatically
-
-      # ── Step 3: Verify dependencies ─────────────────────────────────────────
-      # `go mod verify` checks that the module cache matches the checksums
-      # in go.sum — protects against supply-chain tampering.
-      - name: Verify dependencies
-        run: go mod verify
+          work-dir: 'backend'
 
       # ── Step 4: Compile ─────────────────────────────────────────────────────
       # `go build` catches compilation errors BEFORE running tests.
