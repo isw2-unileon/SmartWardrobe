@@ -13,19 +13,16 @@ import (
 func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	// A. Instantiate the Repository
-	userRepo := repository.NewUserRepository(db)
 	masterColorRepo := repository.NewMasterColorRepository(db)
 	masterTypeRepo := repository.NewMasterTypeRepository(db)
 	masterStyleRepo := repository.NewMasterStyleRepository(db)
 
 	// B. Instantiate the Service and inject the Repository
-	userService := services.NewUserService(userRepo)
 	masterColorService := services.NewMasterColorService(masterColorRepo)
 	masterTypeService := services.NewMasterTypeService(masterTypeRepo)
 	masterStyleService := services.NewMasterStyleService(masterStyleRepo)
 
 	// C. Instantiate the Handler and inject the Service
-	userHandler := handlers.NewUserHandler(userService)
 	masterColorHandler := handlers.NewMasterColorHandler(masterColorService)
 	masterTypeHandler := handlers.NewMasterTypeHandler(masterTypeService)
 	masterStyleHandler := handlers.NewMasterStyleHandler(masterStyleService)
@@ -34,8 +31,6 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	api := r.Group("/api")
 	{
 		// Public routes (No JWT required)
-		api.POST("/login", userHandler.Login)
-
 		api.GET("/getAllColors", masterColorHandler.GetAll)
 
 		api.GET("/getAllTypes", masterTypeHandler.GetAll)
