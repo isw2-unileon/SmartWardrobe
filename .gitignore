@@ -6,6 +6,10 @@
 /backend/*.exe
 /backend/*.out
 
+# Next
+/frontend/node_modules/*
+/frontend/package-lock.json
+
 # Environment variables
 /backend/.env
 /frontend/.env.local
