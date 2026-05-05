@@ -33,8 +33,8 @@ jobs:
         working-directory: ./backend
 
     steps:
-      # ── Step 1: Dowload the code ────────────────────────────────────────────
-      # Code is downloaded so that GitHub can view the folder . github.
+      # ── Step 1: Download the code ────────────────────────────────────────────
+      # Code is downloaded so that GitHub can view the folder .github
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -46,13 +46,13 @@ jobs:
         with:
           work-dir: 'backend'
 
-      # ── Step 4: Compile ─────────────────────────────────────────────────────
+      # ── Step 3: Compile ─────────────────────────────────────────────────────
       # `go build` catches compilation errors BEFORE running tests.
       # The ./... pattern means "all packages in this module".
       - name: Build
         run: go build ./...
 
-      # ── Step 5: Run tests ───────────────────────────────────────────────────
+      # ── Step 4: Run tests ───────────────────────────────────────────────────
       # -race detects data races in concurrent code.
       # -count=1 disables test result caching (always re-run).
       - name: Run tests
