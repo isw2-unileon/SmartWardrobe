@@ -1,0 +1,25 @@
+# Binaries
+/bin/
+/build/
+
+# Go
+/backend/*.exe
+/backend/*.out
+
+# Next
+/frontend/node_modules/*
+/frontend/package-lock.json
+
+# Environment variables
+/backend/.env
+/frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
