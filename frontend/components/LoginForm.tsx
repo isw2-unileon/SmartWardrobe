@@ -1,41 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState } from "react";
 import { login } from "@/services/auth";
 
-export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-// Handle form submission
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    try {
-      const data = await login(email, password);
-      console.log("Login OK:", data);
-    } catch (err) {
-      console.error("Login error:", err);
-    }
-  };
+export default function LoginForm({ errorMessage }: { errorMessage?: string }) {
+  const [state, formAction, isPending] = useActionState(login, { error: "" });
 
   return (
-    <form onSubmit={handleSubmit}>
+    // The action automatically sends all inputs that have the "name" tag
+    <form action={formAction}>
       <h2>Login</h2>
+
+      {/* The error is displayed if the prop receives it */}
+      {state?.error && (
+        <div style={{ padding: '10px', backgroundColor: '#ffebee', color: '#c62828', borderRadius: '4px' }}>
+          {state.error}
+        </div>
+      )}
 
       <input
         type="email"
+        name="email"    
         placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
+        required
       />
 
       <input
         type="password"
+        name="password"  
         placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
+        required
       />
 
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isPending}>
+        {isPending ? "Loading..." : "Login"}
+      </button>
     </form>
   );
 }

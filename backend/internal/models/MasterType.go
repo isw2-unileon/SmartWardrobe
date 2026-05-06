@@ -1,11 +1,15 @@
 package models
 
 type MasterType struct {
-    ID         int64   
-    Name       string  
-    CategoryID int64   
-    MinTemp    float64 
-    MaxTemp    float64 
-    Warmth     int64   
-    Layer      *int64  
+	ID         int64
+	Name       string
+	CategoryId *int64  `json:"category_id" gorm:"column:category_id"`
+	MinTemp    float64 `json:"min_temp" gorm:"column:min_temp"`
+	MaxTemp    float64 `json:"max_temp" gorm:"column:max_temp"`
+	Warmth     int8
+	Layer      *int8
+}
+
+func (MasterType) TableName() string {
+	return "master_types"
 }

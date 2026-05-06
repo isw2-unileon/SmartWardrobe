@@ -1,0 +1,59 @@
+# ==============================================================================
+# Workflow 01 — Frontend CI
+#
+# PURPOSE: This is the CORE of CI. Every time someone pushes code or opens a
+# pull request, automatically verify that:
+#   1. The code compiles (no syntax errors)
+#   2. All tests pass
+#   3. Nobody broke anything
+#
+# This is the workflow that gives developers confidence to merge quickly.
+#
+# KEY CONCEPTS:
+#   - actions/checkout      → Clones the repo onto the runner
+#   - actions/setup-go      → Installs Go on the runner
+#   - Branch protection     → Require this check to pass before merging a PR
+#   - Job outputs & status  → Green ✅ or red ❌ on the PR page
+# ==============================================================================
+
+name: 04 · Frontend CI
+
+on:
+  push:   
+    paths:
+      - 'frontend/**'                   
+  pull_request:    
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Build & Test Next.js
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      # ── Step 1: Download the code ──────────────────────────────────────────
+      # Code is downloaded so that GitHub can view the folder .github
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Step 2: Install Node.js ────────────────────────────────────────────
+      # Called the composite action that encompasses all initial setup 
+      # in a single block.
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node-project
+        with:
+          work-dir: 'frontend'
+
+      # ── Step 3: Linting ────────────────────────────────────────────────────
+      - name: Check Linting
+        run: npm run lint
+
+      # ── Step 4: Compile ───────────────────────────────────────────────────
+      - name: Build Next.js app
+        run: npm run build
