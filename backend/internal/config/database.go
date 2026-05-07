@@ -21,7 +21,7 @@ func Connect() (*gorm.DB, error) {
 		PreferSimpleProtocol: true,
 	}), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("Error when opening the database: %w", err)
+		return nil, fmt.Errorf("error when opening the database: %w", err)
 	}
 
 	return db, nil
