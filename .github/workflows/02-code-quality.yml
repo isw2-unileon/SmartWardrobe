@@ -42,6 +42,9 @@ jobs:
       run:
         working-directory: ./backend
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup project
         uses: ./.github/actions/setup-go-project
         with:
@@ -97,7 +100,7 @@ jobs:
           cache: false   # golangci-lint manages its own cache below
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v9
         with:
           version: latest
           working-directory: backend

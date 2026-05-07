@@ -25,7 +25,9 @@ func main() {
 
 	sqlDB, err := db.DB()
 	if err == nil {
-		defer sqlDB.Close()
+		defer func() {
+			_ = sqlDB.Close()
+		}()
 	}
 
 	r := gin.Default()
