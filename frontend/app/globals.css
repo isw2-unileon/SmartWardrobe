@@ -2,7 +2,7 @@
 
 :root {
   /* Main palette */
-  --background: #F7F3EE;
+  --background: #FAF6F0;
   --foreground: #4B3A2F;
 
   /* Primary colors */
@@ -130,8 +130,6 @@ textarea:focus {
 /* ---------- BUTTONS ---------- */
 
 button {
-  width: 100%;
-
   background-color: var(--primary);
 
   color: white;
