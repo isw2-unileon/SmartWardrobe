@@ -3,6 +3,7 @@ package main
 import (
 	"backend/internal/config"
 	"backend/internal/routes"
+	"backend/middleware"
 	"log"
 
 	"github.com/gin-contrib/cors"
@@ -38,7 +39,8 @@ func main() {
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
-	r.Use(cors.New(config))
+	// Todas las llamasdas al back pasan por el middleware
+	r.Use(middleware.AuthMiddleware)
 
 	routes.SetupRoutes(r, db)
 
