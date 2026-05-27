@@ -41,6 +41,8 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 		api.GET("/clothingItems", clothingItemsHandler.GetAll)
 
+		api.POST("/addClothingItem", clothingItemsHandler.AddClothingItem)
+
 	}
 
 }

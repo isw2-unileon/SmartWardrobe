@@ -1,7 +1,7 @@
 package models
 
 type ClothingItem struct {
-	ID       int64
+	ID       int64  `gorm:"primaryKey;autoIncrement"`
 	TypeId   *int64 `json:"type_id" gorm:"column:type_id"`
 	ColorId  *int64 `json:"color_id" gorm:"column:color_id"`
 	ImageUrl string `json:"image_url" gorm:"column:image_url"`

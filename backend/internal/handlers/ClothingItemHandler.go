@@ -9,6 +9,7 @@ import (
 
 type ClothingItemService interface {
 	GetAll() ([]dto.ClothingItemDto, error)
+	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
 }
 
 type ClothingItemHandler struct {
@@ -29,4 +30,35 @@ func (h *ClothingItemHandler) GetAll(c *gin.Context) {
 
 	// The list id returned with a 200 OK
 	c.JSON(http.StatusOK, clothes)
+}
+
+// Add the clothing item of the cody in the database
+func (h *ClothingItemHandler) AddClothingItem(c *gin.Context) {
+	// Get the clothing item
+	var clothingItem dto.ClothingItemDto
+	if err := c.ShouldBindJSON(&clothingItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Get the user
+	userRaw, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	user := dto.UserDto{
+		ID: int64(userRaw.(float64)),
+	}
+
+	save, err := h.service.AddClothingItem(clothingItem, user)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error when add clothes"})
+		return
+	}
+
+	// the boolean is returned with a 200 OK
+	c.JSON(http.StatusOK, save)
 }
