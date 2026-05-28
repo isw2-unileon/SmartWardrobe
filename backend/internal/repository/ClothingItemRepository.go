@@ -23,6 +23,14 @@ func (r *ClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
 	return clothes, err
 }
 
+func (r *ClothingItemRepository) GetClothingItem(filters models.ClothingItem) ([]models.ClothingItem, error) {
+	var list []models.ClothingItem
+
+	err := r.db.Where(filters).Find(&list).Error
+
+	return list, err
+}
+
 // Add the clothing item
 func (r *ClothingItemRepository) AddClothingItem(model models.ClothingItem) (*models.ClothingItem, error) {
 	err := r.db.Create(&model).Error

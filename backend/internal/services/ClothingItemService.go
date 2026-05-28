@@ -7,6 +7,7 @@ import (
 
 type ClothingItemRepository interface {
 	GetAll() ([]models.ClothingItem, error)
+	GetClothingItem(models.ClothingItem) ([]models.ClothingItem, error)
 	AddClothingItem(models.ClothingItem) (*models.ClothingItem, error)
 	UpdateClothingItem(int64, models.ClothingItem) (*models.ClothingItem, error)
 	DeleteClothingItem(int64) error
@@ -40,6 +41,35 @@ func (s *ClothingItemService) GetAll() ([]dto.ClothingItemDto, error) {
 	}
 
 	return clothesDto, nil
+}
+
+func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, user dto.UserDto) ([]dto.ClothingItemDto, error) {
+	model := models.ClothingItem{
+		TypeId:   clothingItem.TypeId,
+		ColorId:  clothingItem.ColorId,
+		ImageUrl: clothingItem.ImageUrl,
+		StyleId:  clothingItem.StyleId,
+		UserId:   user.ID,
+	}
+
+	list, err := s.repo.GetClothingItem(model)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert the model to dto
+	var listDto []dto.ClothingItemDto
+	for _, c := range list {
+		listDto = append(listDto, dto.ClothingItemDto{
+			ID:       c.ID,
+			TypeId:   c.TypeId,
+			ColorId:  c.ColorId,
+			ImageUrl: c.ImageUrl,
+			StyleId:  c.StyleId,
+		})
+	}
+
+	return listDto, nil
 }
 
 func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.UserDto) (bool, error) {

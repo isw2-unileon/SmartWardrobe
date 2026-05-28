@@ -10,6 +10,7 @@ import (
 
 type ClothingItemService interface {
 	GetAll() ([]dto.ClothingItemDto, error)
+	GetClothingItem(dto.ClothingItemDto, dto.UserDto) ([]dto.ClothingItemDto, error)
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
 	UpdateClothingItem(int64, dto.ClothingItemDto) (dto.ClothingItemDto, error)
 	DeleteClothingItem(int64) error
@@ -33,6 +34,72 @@ func (h *ClothingItemHandler) GetAll(c *gin.Context) {
 
 	// The list id returned with a 200 OK
 	c.JSON(http.StatusOK, clothes)
+}
+
+// Get the clothing item in function of filters
+func (h *ClothingItemHandler) GetClothingItem(c *gin.Context) {
+	// Get the user
+	userRaw, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userID, ok := userRaw.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing user"})
+		return
+	}
+
+	user := dto.UserDto{
+		ID: userID,
+	}
+
+	// Get the clothing filters
+	var typeId, colorId, styleId *int64
+
+	if val := c.Query("typeId"); val != "" {
+		id, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid typeId"})
+			return
+		}
+		typeId = &id
+	}
+
+	if val := c.Query("colorId"); val != "" {
+		id, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid colorId"})
+			return
+		}
+		colorId = &id
+	}
+
+	if val := c.Query("styleId"); val != "" {
+		id, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid styleId"})
+			return
+		}
+		styleId = &id
+	}
+
+	clothingItem := dto.ClothingItemDto{
+		TypeId:  typeId,
+		ColorId: colorId,
+		StyleId: styleId,
+	}
+
+	list, err := h.service.GetClothingItem(clothingItem, user)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error when filter clothes"})
+		return
+	}
+
+	// the list of clothing items with the filters is returned with a 200 OK
+	c.JSON(http.StatusOK, list)
 }
 
 // Add the clothing item of the cody in the database

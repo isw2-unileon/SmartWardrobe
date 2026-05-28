@@ -41,6 +41,8 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 		api.GET("/clothingItems", clothingItemsHandler.GetAll)
 
+		api.GET("/clothingItem/filters", clothingItemsHandler.GetClothingItem)
+
 		api.POST("/clothingItem", clothingItemsHandler.AddClothingItem)
 
 		api.PUT("/clothingItem/:id", clothingItemsHandler.UpdateClothingItem)
