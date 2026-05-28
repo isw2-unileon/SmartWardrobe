@@ -30,6 +30,15 @@ func (r *ClothingItemRepository) AddClothingItem(model models.ClothingItem) (*mo
 	return &model, err
 }
 
+// Update the clothing item according to the id with the params
+func (r *ClothingItemRepository) UpdateClothingItem(id int64, model models.ClothingItem) (*models.ClothingItem, error) {
+	err := r.db.Model(&models.ClothingItem{}).Where("id = ?", id).Updates(model).Error
+	if err != nil {
+		return nil, err
+	}
+	return &model, nil
+}
+
 // Delete the clothing Item according to the id
 func (r *ClothingItemRepository) DeleteClothingItem(id int64) error {
 	err := r.db.Delete(&models.ClothingItem{}, id).Error

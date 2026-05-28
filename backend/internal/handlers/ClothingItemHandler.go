@@ -11,6 +11,7 @@ import (
 type ClothingItemService interface {
 	GetAll() ([]dto.ClothingItemDto, error)
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
+	UpdateClothingItem(int64, dto.ClothingItemDto) (dto.ClothingItemDto, error)
 	DeleteClothingItem(int64) error
 }
 
@@ -71,8 +72,35 @@ func (h *ClothingItemHandler) AddClothingItem(c *gin.Context) {
 	c.JSON(http.StatusOK, save)
 }
 
+// Update the clothing item that has the id passed as a parameter and updates with the data of the request body
+func (h *ClothingItemHandler) UpdateClothingItem(c *gin.Context) {
+	//The ID of the clothing item to update is in the URL
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	// Body with the update data
+	var body dto.ClothingItemDto
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updated, err := h.service.UpdateClothingItem(id, body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating clothing item"})
+		return
+	}
+
+	c.JSON(http.StatusOK, updated)
+}
+
+// Delete the clothing item that has the id passed as a parameter
 func (h *ClothingItemHandler) DeleteClothingItem(c *gin.Context) {
-	// The ID of the clothing item to delte is in the URL
+	// The ID of the clothing item to delete is in the URL
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {

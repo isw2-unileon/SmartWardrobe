@@ -43,6 +43,8 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 		api.POST("/clothingItem", clothingItemsHandler.AddClothingItem)
 
+		api.PUT("/clothingItem/:id", clothingItemsHandler.UpdateClothingItem)
+
 		api.DELETE("/clothingItem/:id", clothingItemsHandler.DeleteClothingItem)
 
 	}
