@@ -3,6 +3,7 @@ package handlers
 import (
 	"backend/internal/dto"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,7 @@ import (
 type ClothingItemService interface {
 	GetAll() ([]dto.ClothingItemDto, error)
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
+	DeleteClothingItem(int64) error
 }
 
 type ClothingItemHandler struct {
@@ -67,4 +69,22 @@ func (h *ClothingItemHandler) AddClothingItem(c *gin.Context) {
 
 	// the boolean is returned with a 200 OK
 	c.JSON(http.StatusOK, save)
+}
+
+func (h *ClothingItemHandler) DeleteClothingItem(c *gin.Context) {
+	// The ID of the clothing item to delte is in the URL
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	err = h.service.DeleteClothingItem(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting clothing item"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
 }

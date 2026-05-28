@@ -8,6 +8,7 @@ import (
 type ClothingItemRepository interface {
 	GetAll() ([]models.ClothingItem, error)
 	AddClothingItem(models.ClothingItem) (*models.ClothingItem, error)
+	DeleteClothingItem(int64) error
 }
 
 type ClothingItemService struct {
@@ -59,5 +60,9 @@ func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.
 	}
 
 	return false, nil
+}
 
+func (s *ClothingItemService) DeleteClothingItem(id int64) error {
+
+	return s.repo.DeleteClothingItem(id)
 }

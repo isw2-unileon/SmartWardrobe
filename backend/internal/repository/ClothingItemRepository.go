@@ -23,12 +23,15 @@ func (r *ClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
 	return clothes, err
 }
 
+// Add the clothing item
 func (r *ClothingItemRepository) AddClothingItem(model models.ClothingItem) (*models.ClothingItem, error) {
 	err := r.db.Create(&model).Error
 
-	if err != nil {
-		return nil, err
-	}
+	return &model, err
+}
 
-	return &model, nil
+// Delete the clothing Item according to the id
+func (r *ClothingItemRepository) DeleteClothingItem(id int64) error {
+	err := r.db.Delete(&models.ClothingItem{}, id).Error
+	return err
 }
