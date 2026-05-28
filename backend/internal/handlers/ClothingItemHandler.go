@@ -48,8 +48,14 @@ func (h *ClothingItemHandler) AddClothingItem(c *gin.Context) {
 		return
 	}
 
+	userID, ok := userRaw.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing user"})
+		return
+	}
+
 	user := dto.UserDto{
-		ID: int64(userRaw.(float64)),
+		ID: userID,
 	}
 
 	save, err := h.service.AddClothingItem(clothingItem, user)

@@ -46,7 +46,7 @@ func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.
 		ColorId:  dto.ColorId,
 		ImageUrl: dto.ImageUrl,
 		StyleId:  dto.StyleId,
-		UserId:   &user.ID,
+		UserId:   user.ID,
 	}
 
 	save, err := s.repo.AddClothingItem(model)
