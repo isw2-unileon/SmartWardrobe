@@ -31,13 +31,7 @@ func (s *ClothingItemService) GetAll() ([]dto.ClothingItemDto, error) {
 	// Convert the model to dto
 	var clothesDto []dto.ClothingItemDto
 	for _, c := range clothes {
-		clothesDto = append(clothesDto, dto.ClothingItemDto{
-			ID:       c.ID,
-			TypeId:   c.TypeId,
-			ColorId:  c.ColorId,
-			ImageUrl: c.ImageUrl,
-			StyleId:  c.StyleId,
-		})
+		clothesDto = append(clothesDto, mapModelToDto(c))
 	}
 
 	return clothesDto, nil
@@ -45,11 +39,18 @@ func (s *ClothingItemService) GetAll() ([]dto.ClothingItemDto, error) {
 
 func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, user dto.UserDto) ([]dto.ClothingItemDto, error) {
 	model := models.ClothingItem{
-		TypeId:   clothingItem.TypeId,
-		ColorId:  clothingItem.ColorId,
-		ImageUrl: clothingItem.ImageUrl,
-		StyleId:  clothingItem.StyleId,
-		UserId:   user.ID,
+		UserId: user.ID,
+	}
+
+	// Only assigns the filter if the field is not nil
+	if clothingItem.Type != nil {
+		model.TypeId = &clothingItem.Type.ID
+	}
+	if clothingItem.Color != nil {
+		model.ColorId = &clothingItem.Color.ID
+	}
+	if clothingItem.Style != nil {
+		model.StyleId = &clothingItem.Style.ID
 	}
 
 	list, err := s.repo.GetClothingItem(model)
@@ -60,13 +61,7 @@ func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, 
 	// Convert the model to dto
 	var listDto []dto.ClothingItemDto
 	for _, c := range list {
-		listDto = append(listDto, dto.ClothingItemDto{
-			ID:       c.ID,
-			TypeId:   c.TypeId,
-			ColorId:  c.ColorId,
-			ImageUrl: c.ImageUrl,
-			StyleId:  c.StyleId,
-		})
+		listDto = append(listDto, mapModelToDto(c))
 	}
 
 	return listDto, nil
@@ -74,10 +69,10 @@ func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, 
 
 func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.UserDto) (bool, error) {
 	model := models.ClothingItem{
-		TypeId:   dto.TypeId,
-		ColorId:  dto.ColorId,
+		TypeId:   &dto.Type.ID,
+		ColorId:  &dto.Color.ID,
 		ImageUrl: dto.ImageUrl,
-		StyleId:  dto.StyleId,
+		StyleId:  &dto.Style.ID,
 		UserId:   user.ID,
 	}
 
@@ -95,22 +90,16 @@ func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.
 
 func (s *ClothingItemService) UpdateClothingItem(id int64, d dto.ClothingItemDto) (dto.ClothingItemDto, error) {
 	model := models.ClothingItem{
-		TypeId:   d.TypeId,
-		ColorId:  d.ColorId,
+		TypeId:   &d.Type.ID,
+		ColorId:  &d.Color.ID,
 		ImageUrl: d.ImageUrl,
-		StyleId:  d.StyleId,
+		StyleId:  &d.Style.ID,
 	}
 
 	update, err := s.repo.UpdateClothingItem(id, model)
 
 	//Convert the model to dto
-	updateDto := dto.ClothingItemDto{
-		ID:       update.ID,
-		TypeId:   update.TypeId,
-		ColorId:  update.ColorId,
-		ImageUrl: update.ImageUrl,
-		StyleId:  update.StyleId,
-	}
+	updateDto := mapModelToDto(*update)
 
 	return updateDto, err
 }
@@ -118,4 +107,24 @@ func (s *ClothingItemService) UpdateClothingItem(id int64, d dto.ClothingItemDto
 func (s *ClothingItemService) DeleteClothingItem(id int64) error {
 
 	return s.repo.DeleteClothingItem(id)
+}
+
+// Convert the model to dto
+func mapModelToDto(c models.ClothingItem) dto.ClothingItemDto {
+	return dto.ClothingItemDto{
+		ID:       c.ID,
+		ImageUrl: c.ImageUrl,
+		Type: &dto.MasterTypeDto{
+			ID:   c.Type.ID,
+			Name: c.Type.Name,
+		},
+		Color: &dto.MasterColorDto{
+			ID:   c.Color.ID,
+			Name: c.Color.Name,
+		},
+		Style: &dto.MasterStyleDto{
+			ID:   c.Style.ID,
+			Name: c.Style.Name,
+		},
+	}
 }

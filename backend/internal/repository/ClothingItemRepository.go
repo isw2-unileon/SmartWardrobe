@@ -18,7 +18,11 @@ func NewClothingItemRepository(db *gorm.DB) *ClothingItemRepository {
 func (r *ClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
 	var clothes []models.ClothingItem
 
-	err := r.db.Find(&clothes).Error
+	err := r.db.
+		Preload("Type").
+		Preload("Color").
+		Preload("Style").
+		Find(&clothes).Error
 
 	return clothes, err
 }
@@ -26,7 +30,12 @@ func (r *ClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
 func (r *ClothingItemRepository) GetClothingItem(filters models.ClothingItem) ([]models.ClothingItem, error) {
 	var list []models.ClothingItem
 
-	err := r.db.Where(filters).Find(&list).Error
+	err := r.db.
+		Preload("Type").
+		Preload("Color").
+		Preload("Style").
+		Where(filters).
+		Find(&list).Error
 
 	return list, err
 }
@@ -40,11 +49,26 @@ func (r *ClothingItemRepository) AddClothingItem(model models.ClothingItem) (*mo
 
 // Update the clothing item according to the id with the params
 func (r *ClothingItemRepository) UpdateClothingItem(id int64, model models.ClothingItem) (*models.ClothingItem, error) {
-	err := r.db.Model(&models.ClothingItem{}).Where("id = ?", id).Updates(model).Error
+	err := r.db.
+		Model(&models.ClothingItem{}).
+		Where("id = ?", id).
+		Updates(model).Error
+
 	if err != nil {
 		return nil, err
 	}
-	return &model, nil
+
+	var updated models.ClothingItem
+	err = r.db.
+		Preload("Type").
+		Preload("Color").
+		Preload("Style").
+		First(&updated, id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &updated, nil
 }
 
 // Delete the clothing Item according to the id

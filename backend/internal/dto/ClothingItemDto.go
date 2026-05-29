@@ -1,9 +1,9 @@
 package dto
 
 type ClothingItemDto struct {
-	ID       int64  `json:"id"`
-	TypeId   *int64 `json:"typeId" binding:"required"`
-	ColorId  *int64 `json:"colorId" binding:"required"`
-	ImageUrl string `json:"imageUrl" binding:"required"`
-	StyleId  *int64 `json:"styleId" binding:"required"`
+	ID       int64           `json:"id"`
+	Type     *MasterTypeDto  `json:"type" binding:"required"`
+	Color    *MasterColorDto `json:"color" binding:"required"`
+	ImageUrl string          `json:"imageUrl" binding:"required"`
+	Style    *MasterStyleDto `json:"style" binding:"required"`
 }

@@ -56,7 +56,7 @@ func (h *ClothingItemHandler) GetClothingItem(c *gin.Context) {
 	}
 
 	// Get the clothing filters
-	var typeId, colorId, styleId *int64
+	clothingItem := dto.ClothingItemDto{}
 
 	if val := c.Query("typeId"); val != "" {
 		id, err := strconv.ParseInt(val, 10, 64)
@@ -64,7 +64,7 @@ func (h *ClothingItemHandler) GetClothingItem(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid typeId"})
 			return
 		}
-		typeId = &id
+		clothingItem.Type = &dto.MasterTypeDto{ID: id}
 	}
 
 	if val := c.Query("colorId"); val != "" {
@@ -73,7 +73,7 @@ func (h *ClothingItemHandler) GetClothingItem(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid colorId"})
 			return
 		}
-		colorId = &id
+		clothingItem.Color = &dto.MasterColorDto{ID: id}
 	}
 
 	if val := c.Query("styleId"); val != "" {
@@ -82,13 +82,7 @@ func (h *ClothingItemHandler) GetClothingItem(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid styleId"})
 			return
 		}
-		styleId = &id
-	}
-
-	clothingItem := dto.ClothingItemDto{
-		TypeId:  typeId,
-		ColorId: colorId,
-		StyleId: styleId,
+		clothingItem.Style = &dto.MasterStyleDto{ID: id}
 	}
 
 	list, err := h.service.GetClothingItem(clothingItem, user)
