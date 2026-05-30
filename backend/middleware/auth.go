@@ -33,7 +33,7 @@ func AuthMiddleware(c *gin.Context) {
 	// The token is analyzed and validated
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method")
+			return nil, fmt.Errorf("unexpected signing method")
 		}
 		// Converts the string to []byte
 		return []byte(secretKey), nil

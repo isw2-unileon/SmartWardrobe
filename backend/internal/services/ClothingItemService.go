@@ -97,6 +97,9 @@ func (s *ClothingItemService) UpdateClothingItem(id int64, d dto.ClothingItemDto
 	}
 
 	update, err := s.repo.UpdateClothingItem(id, model)
+	if err != nil || update == nil {
+		return dto.ClothingItemDto{}, err
+	}
 
 	//Convert the model to dto
 	updateDto := mapModelToDto(*update)
