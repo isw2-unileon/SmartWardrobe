@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 export default function MainMenu() {
   const router = useRouter();
 
-  const mockItems = Array.from({ length: 12 });
+  const mockItems = Array.from({ length: 24 });
 
   return (
     <div
@@ -13,127 +13,168 @@ export default function MainMenu() {
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
-        padding: "3rem",
+        alignItems: "center",
+        padding: "2rem",
       }}
     >
+      {/* LOG OUT OUTSIDE */}
+
       <div
         style={{
           width: "100%",
-          maxWidth: "1100px",
-          backgroundColor: "#FFFDFB",
-          borderRadius: "28px",
-          padding: "2rem",
-          boxShadow:
-            "0 10px 25px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.03)",
-          border: "1px solid #E5D8CC",
+          maxWidth: "1150px",
+          position: "relative",
         }}
       >
-        {/* Top section */}
-
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "2rem",
-            gap: "1rem",
+            justifyContent: "flex-end",
+            marginBottom: "1rem",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-            }}
+          <button
+            onClick={() => router.push("/login")}
           >
-            <button onClick={() => router.push("/add-item")}>
-              Add Item
-            </button>
-
-            <button onClick={() => router.push("/search-item")}>
-              Search Item
-            </button>
-          </div>
-
-          <button onClick={() => router.push("/login")}>
             Log Out
           </button>
         </div>
 
-        {/* Wardrobe grid */}
+        {/* MAIN PANEL */}
 
         <div
           style={{
-            border: "1px solid #E5D8CC",
-            borderRadius: "22px",
-            padding: "1.5rem",
-            height: "420px",
-            overflowY: "auto",
-            marginBottom: "2rem",
-            backgroundColor: "#FCFAF7",
+            backgroundColor: "#C8B6A6",
+            borderRadius: "28px",
+            padding: "2rem",
+
+            border: "1px solid #B8A391",
+
+            boxShadow:
+              "0 10px 25px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.03)",
+
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.8rem",
           }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1.5rem",
-            }}
-          >
-            {mockItems.map((_, index) => (
-              <div
-                key={index}
-                style={{
-                  aspectRatio: "1",
-                  border: "2px solid #C8B6A6",
-                  borderRadius: "18px",
-                  backgroundColor: "#FFFDFB",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Create outfit */}
-
-        <div>
-          <h2
-            style={{
-              marginBottom: "1.5rem",
-            }}
-          >
-            Create Outfit
-          </h2>
+          {/* TOP ACTIONS */}
 
           <div
             style={{
               display: "flex",
               gap: "1rem",
-              flexWrap: "wrap",
             }}
           >
             <button
-              onClick={() =>
-                router.push("/create-outfit/today")
-              }
+              onClick={() => router.push("/addItem")}
             >
-              Today
+              Add Item
             </button>
 
             <button
               onClick={() =>
-                router.push("/create-outfit/tomorrow")
+                router.push("/searchItem")
               }
             >
-              Tomorrow
+              Search Item
             </button>
+          </div>
 
-            <button
-              onClick={() =>
-                router.push("/create-outfit/week")
-              }
+          {/* WARDROBE */}
+
+          <div
+            style={{
+              backgroundColor: "#FFFDFB",
+
+              borderRadius: "24px",
+
+              border: "1px solid #B8A391",
+
+              padding: "1.25rem",
+
+              height: "470px",
+
+              overflowY: "auto",
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+
+                gridTemplateColumns:
+                  "repeat(4, 1fr)",
+
+                gap: "1rem",
+              }}
             >
-              For a Week
-            </button>
+              {mockItems.map((_, index) => (
+                <div
+                  key={index}
+                  style={{
+                    aspectRatio: "1",
+
+                    borderRadius: "18px",
+
+                    border:
+                      "2px solid #B8A391",
+
+                    backgroundColor:
+                      "#FCFAF7",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* CREATE OUTFIT */}
+
+          <div>
+            <h2
+              style={{
+                marginBottom: "1rem",
+              }}
+            >
+              Create Outfit
+            </h2>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/today"
+                  )
+                }
+              >
+                Today
+              </button>
+
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/tomorrow"
+                  )
+                }
+              >
+                Tomorrow
+              </button>
+
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/week"
+                  )
+                }
+              >
+                For a Week
+              </button>
+            </div>
           </div>
         </div>
       </div>
