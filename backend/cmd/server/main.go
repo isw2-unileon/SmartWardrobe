@@ -3,7 +3,9 @@ package main
 import (
 	"backend/internal/config"
 	"backend/internal/routes"
+	"backend/middleware"
 	"log"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -25,18 +27,22 @@ func main() {
 
 	sqlDB, err := db.DB()
 	if err == nil {
-		defer sqlDB.Close()
+		defer func() {
+			_ = sqlDB.Close()
+		}()
 	}
 
 	r := gin.Default()
 
 	// CORS configuration: Vital for connecting the local Frontend
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} //the frontend port
+	config.AllowOrigins = []string{os.Getenv("NEXT_URL")} //the frontend port
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
+	// All calls to the back go through the middleware
 	r.Use(cors.New(config))
+	r.Use(middleware.AuthMiddleware)
 
 	routes.SetupRoutes(r, db)
 
