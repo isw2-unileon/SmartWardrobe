@@ -33,11 +33,7 @@ export default function MainMenu() {
             marginBottom: "1rem",
           }}
         >
-          <button
-            onClick={() => router.push("/login")}
-          >
-            Log Out
-          </button>
+          <button onClick={() => router.push("/login")}>Log Out</button>
         </div>
 
         {/* MAIN PANEL */}
@@ -66,17 +62,9 @@ export default function MainMenu() {
               gap: "1rem",
             }}
           >
-            <button
-              onClick={() => router.push("/addItem")}
-            >
-              Add Item
-            </button>
+            <button onClick={() => router.push("/addItem")}>Add Item</button>
 
-            <button
-              onClick={() =>
-                router.push("/searchItem")
-              }
-            >
+            <button onClick={() => router.push("/searchItem")}>
               Search Item
             </button>
           </div>
@@ -102,8 +90,7 @@ export default function MainMenu() {
               style={{
                 display: "grid",
 
-                gridTemplateColumns:
-                  "repeat(4, 1fr)",
+                gridTemplateColumns: "repeat(4, 1fr)",
 
                 gap: "1rem",
               }}
@@ -116,11 +103,9 @@ export default function MainMenu() {
 
                     borderRadius: "18px",
 
-                    border:
-                      "2px solid #B8A391",
+                    border: "2px solid #B8A391",
 
-                    backgroundColor:
-                      "#FCFAF7",
+                    backgroundColor: "#FCFAF7",
                   }}
                 />
               ))}
@@ -145,33 +130,15 @@ export default function MainMenu() {
                 flexWrap: "wrap",
               }}
             >
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/today"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/today")}>
                 Today
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/tomorrow"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/tomorrow")}>
                 Tomorrow
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/week"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/week")}>
                 For a Week
               </button>
             </div>
