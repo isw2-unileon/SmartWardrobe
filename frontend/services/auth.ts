@@ -26,5 +26,5 @@ export async function login(_prevState: any, formData: FormData) {
   }
 
   // If everything is correct, the session is saved in cookies and redirected to the main page
-  redirect('/')
+  redirect('/wardrobe')
 }
