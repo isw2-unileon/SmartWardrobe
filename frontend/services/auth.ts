@@ -26,7 +26,7 @@ export async function login(_prevState: any, formData: FormData) {
   }
 
   // If everything is correct, the session is saved in cookies and redirected to the main page
-  redirect('/wardrobe')
+  redirect('/mainMenu')
 }
 
 export async function signUp(_prevState: any, formData: FormData) {
@@ -47,5 +47,5 @@ export async function signUp(_prevState: any, formData: FormData) {
     }
   }
 
-  redirect('/login')
+  redirect('/mainMenu')
 }
