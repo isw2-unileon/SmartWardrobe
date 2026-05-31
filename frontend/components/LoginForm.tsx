@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { login } from "@/services/auth";
 
-export default function LoginForm({ errorMessage }: { errorMessage?: string }) {
+export default function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, { error: "" });
 
  return (

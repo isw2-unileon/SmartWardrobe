@@ -4,7 +4,12 @@ import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
-export async function login(_prevState: any, formData: FormData) {
+// Data type for the state
+export type AuthState = {
+  error?: string;
+} | null | undefined;
+
+export async function login(_prevState: AuthState, formData: FormData) {
   // The form data is extracted
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -29,7 +34,7 @@ export async function login(_prevState: any, formData: FormData) {
   redirect('/mainMenu')
 }
 
-export async function signUp(_prevState: any, formData: FormData) {
+export async function signUp(_prevState: AuthState, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
