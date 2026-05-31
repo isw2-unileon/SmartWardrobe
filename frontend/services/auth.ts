@@ -26,5 +26,26 @@ export async function login(_prevState: any, formData: FormData) {
   }
 
   // If everything is correct, the session is saved in cookies and redirected to the main page
-  redirect('/wardrobe')
+  redirect('/mainMenu')
+}
+
+export async function signUp(_prevState: any, formData: FormData) {
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  })
+
+  if (error) {
+    return {
+      error: error.message,
+    }
+  }
+
+  redirect('/mainMenu')
 }
