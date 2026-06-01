@@ -23,8 +23,8 @@
 # Logs
 *.log
 
-backend/internal/ai/clipmodels/
-backend/internal/lib/
+backend/models/
+backend/lib/
 
 *.onnx
 *.so
