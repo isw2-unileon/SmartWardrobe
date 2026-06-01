@@ -22,3 +22,11 @@
 
 # Logs
 *.log
+
+backend/internal/ai/clipmodels/
+backend/internal/lib/
+
+*.onnx
+*.so
+*.dll
+*.dylib
