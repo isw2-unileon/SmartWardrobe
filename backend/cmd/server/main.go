@@ -4,7 +4,10 @@ import (
 	//	"backend/internal/ai/clip"
 	"backend/internal/config"
 	//	"backend/internal/services"
+	"backend/internal/routes"
+	"backend/middleware"
 	"log"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -49,6 +52,14 @@ func main() {
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
 	r.Use(cors.New(corsConfig))
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{os.Getenv("NEXT_URL")} //the frontend port
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+
+	// All calls to the back go through the middleware
+	r.Use(cors.New(config))
+	r.Use(middleware.AuthMiddleware)
 
 	//	routes.SetupRoutes(r, db, clipSvc)
 
