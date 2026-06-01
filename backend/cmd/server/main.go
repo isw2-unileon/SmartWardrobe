@@ -1,8 +1,10 @@
 package main
 
 import (
+	"backend/internal/ai/clip"
 	"backend/internal/config"
 	"backend/internal/routes"
+	"backend/internal/services"
 	"log"
 
 	"github.com/gin-contrib/cors"
@@ -30,17 +32,26 @@ func main() {
 		}()
 	}
 
+	// Initialize the CLIP classifier
+	classifier, err := clip.NewCLIPClassifier("./models")
+	if err != nil {
+		log.Fatalf("Could not initialize CLIP: %v", err)
+	}
+	defer classifier.Close()
+
+	clipSvc := services.NewClipService(classifier)
+
 	r := gin.Default()
 
 	// CORS configuration: Vital for connecting the local Frontend
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} //the frontend port
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"http://localhost:3000"} //the frontend port
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
-	r.Use(cors.New(config))
+	r.Use(cors.New(corsConfig))
 
-	routes.SetupRoutes(r, db)
+	routes.SetupRoutes(r, db, clipSvc)
 
 	// The backend will run on port 8080
 	log.Println("Starting server on port 8080...")
