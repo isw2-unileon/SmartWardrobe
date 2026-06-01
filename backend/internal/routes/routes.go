@@ -26,7 +26,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB, clipSvc *services.ClipService) {
 	masterColorHandler := handlers.NewMasterColorHandler(masterColorService)
 	masterTypeHandler := handlers.NewMasterTypeHandler(masterTypeService)
 	masterStyleHandler := handlers.NewMasterStyleHandler(masterStyleService)
-	clothingHandler := handlers.NewClipHandler(clipSvc)
+	clipHandler := handlers.NewClipHandler(clipSvc)
 
 	// We group routes under /api for clean URLs
 	api := r.Group("/api")
@@ -39,7 +39,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB, clipSvc *services.ClipService) {
 		api.GET("/getAllStyles", masterStyleHandler.GetAll)
 
 		// CLIP
-		api.POST("/clothing/analyze", clothingHandler.Analyze)
+		api.POST("/clothing/analyze", clipHandler.Analyze)
 	}
 
 }
