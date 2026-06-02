@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { signOut } from "@/services/auth";
+
 
 export default function MainMenu() {
   const router = useRouter();
@@ -33,11 +35,11 @@ export default function MainMenu() {
             marginBottom: "1rem",
           }}
         >
-          <button
-            onClick={() => router.push("/login")}
-          >
-            Log Out
-          </button>
+         <form action={signOut}>
+           <button type="submit">
+             Log Out
+             </button>
+          </form>
         </div>
 
         {/* MAIN PANEL */}
