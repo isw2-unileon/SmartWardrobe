@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { uploadImage } from "@/services/storage";
+import { useRouter } from "next/navigation";
 
 export default function AddItemForm() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleFile = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -20,17 +22,24 @@ export default function AddItemForm() {
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+  if (!file) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
+  const imageUrl =
     await uploadImage(formData);
 
-    setLoading(false);
-  };
+  setLoading(false);
+
+  router.push(
+    `/addItem/verify?imageUrl=${encodeURIComponent(
+      imageUrl
+    )}`
+  );
+};
 
   return (
     <div className="page-container">

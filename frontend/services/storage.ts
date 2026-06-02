@@ -30,7 +30,5 @@ export async function uploadImage(
     .from("wardrobe-images")
     .getPublicUrl(fileName);
 
-  console.log(publicUrl);
-
   return publicUrl;
 }
