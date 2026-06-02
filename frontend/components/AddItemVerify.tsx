@@ -43,11 +43,7 @@ const TYPES = [
   { id: 16, name: "Heels" },
 ];
 
-export default function AddItemVerify({
-  imageUrl,
-}: {
-  imageUrl: string;
-}) {
+export default function AddItemVerify({ imageUrl }: { imageUrl: string }) {
   const router = useRouter();
 
   const [colorId, setColorId] = useState(1);
@@ -55,9 +51,7 @@ export default function AddItemVerify({
 
   const [typeId, setTypeId] = useState(1);
 
-
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
     setLoading(true);
@@ -98,8 +92,7 @@ export default function AddItemVerify({
                 height: "420px",
                 objectFit: "contain",
                 borderRadius: "20px",
-                border:
-                  "1px solid #E5D8CC",
+                border: "1px solid #E5D8CC",
               }}
             />
           </div>
@@ -115,38 +108,24 @@ export default function AddItemVerify({
             <label>Type</label>
 
             <select
-            value={typeId}
-            onChange={(e) =>
-                setTypeId(
-                Number(e.target.value)
-                )
-            }
+              value={typeId}
+              onChange={(e) => setTypeId(Number(e.target.value))}
             >
-            {TYPES.map((t) => (
-                <option
-                key={t.id}
-                value={t.id}
-                >
-                {t.name}
+              {TYPES.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
                 </option>
-            ))}
+              ))}
             </select>
 
             <label>Color</label>
 
             <select
               value={colorId}
-              onChange={(e) =>
-                setColorId(
-                  Number(e.target.value)
-                )
-              }
+              onChange={(e) => setColorId(Number(e.target.value))}
             >
               {COLORS.map((c) => (
-                <option
-                  key={c.id}
-                  value={c.id}
-                >
+                <option key={c.id} value={c.id}>
                   {c.name}
                 </option>
               ))}
@@ -156,29 +135,17 @@ export default function AddItemVerify({
 
             <select
               value={styleId}
-              onChange={(e) =>
-                setStyleId(
-                  Number(e.target.value)
-                )
-              }
+              onChange={(e) => setStyleId(Number(e.target.value))}
             >
               {STYLES.map((s) => (
-                <option
-                  key={s.id}
-                  value={s.id}
-                >
+                <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
               ))}
             </select>
 
-            <button
-              disabled={loading}
-              onClick={handleSave}
-            >
-              {loading
-                ? "Saving..."
-                : "OK"}
+            <button disabled={loading} onClick={handleSave}>
+              {loading ? "Saving..." : "OK"}
             </button>
           </div>
         </div>

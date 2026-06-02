@@ -7,9 +7,5 @@ export default async function VerifyPage({
 }) {
   const params = await searchParams;
 
-  return (
-    <AddItemVerify
-      imageUrl={params.imageUrl || ""}
-    />
-  );
+  return <AddItemVerify imageUrl={params.imageUrl || ""} />;
 }

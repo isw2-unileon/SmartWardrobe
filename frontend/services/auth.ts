@@ -55,13 +55,13 @@ export async function signUp(_prevState: AuthState, formData: FormData) {
     };
   }
 
-  redirect('/mainMenu')
+  redirect("/mainMenu");
 }
 export async function signOut() {
-  const cookieStore = await cookies()
-  const supabase = createClient(cookieStore)
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
 
-  await supabase.auth.signOut()
+  await supabase.auth.signOut();
 
-  redirect('/')
+  redirect("/");
 }

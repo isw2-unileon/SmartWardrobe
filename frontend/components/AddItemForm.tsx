@@ -10,9 +10,7 @@ export default function AddItemForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleFile = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
 
     if (!selected) return;
@@ -29,16 +27,11 @@ export default function AddItemForm() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const imageUrl =
-      await uploadImage(formData);
+    const imageUrl = await uploadImage(formData);
 
     setLoading(false);
 
-    router.push(
-      `/addItem/verify?imageUrl=${encodeURIComponent(
-        imageUrl
-      )}`
-    );
+    router.push(`/addItem/verify?imageUrl=${encodeURIComponent(imageUrl)}`);
   };
 
   return (
@@ -109,9 +102,7 @@ export default function AddItemForm() {
               minHeight: "20px",
             }}
           >
-            {file
-              ? file.name
-              : "No image selected"}
+            {file ? file.name : "No image selected"}
           </p>
 
           {preview && (
@@ -141,9 +132,7 @@ export default function AddItemForm() {
             disabled={!file || loading}
             onClick={handleUpload}
           >
-            {loading
-              ? "Uploading..."
-              : "Upload Photo"}
+            {loading ? "Uploading..." : "Upload Photo"}
           </button>
         </form>
       </div>
