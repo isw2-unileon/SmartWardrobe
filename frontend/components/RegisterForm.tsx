@@ -71,24 +71,13 @@ export default function RegisterForm() {
             Sign Up
           </h2>
 
-          {state?.error && (
-            <div className="error-message">
-              {state.error}
-            </div>
-          )}
+          {state?.error && <div className="error-message">{state.error}</div>}
 
           {passwordError && (
-            <div className="error-message">
-              {passwordError}
-            </div>
+            <div className="error-message">{passwordError}</div>
           )}
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-          />
+          <input type="email" name="email" placeholder="Email" required />
 
           <input
             type="password"

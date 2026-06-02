@@ -22,3 +22,11 @@
 
 # Logs
 *.log
+
+backend/models/
+backend/lib/
+
+*.onnx
+*.so
+*.dll
+*.dylib
