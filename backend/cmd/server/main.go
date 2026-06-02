@@ -3,6 +3,7 @@ package main
 import (
 	//	"backend/internal/ai/clip"
 	"backend/internal/config"
+	"backend/internal/routes"
 	//	"backend/internal/services"
 
 	"backend/middleware"
@@ -56,6 +57,7 @@ func main() {
 	r.Use(middleware.AuthMiddleware)
 
 	//	routes.SetupRoutes(r, db, clipSvc)
+	routes.SetupRoutes(r, db)
 
 	// The backend will run on port 8080
 	log.Println("Starting server on port 8080...")
