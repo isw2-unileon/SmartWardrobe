@@ -200,20 +200,29 @@ export default function MainMenu({
                   }}
                 />
 
-                <button>
+                <button
+                  style={{
+                    width: "100%",
+                  }}
+                >
                   Modify
                 </button>
 
-                <button>
+                <button
+                  style={{
+                    width: "100%",
+                  }}
+                >
                   Remove
                 </button>
 
                 <button
                   onClick={() =>
-                    setSelectedItem(
-                      null
-                    )
+                    setSelectedItem(null)
                   }
+                  style={{
+                    width: "100%",
+                  }}
                 >
                   Close
                 </button>
