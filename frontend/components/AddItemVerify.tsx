@@ -53,10 +53,8 @@ export default function AddItemVerify({
   const [colorId, setColorId] = useState(1);
   const [styleId, setStyleId] = useState(1);
 
-  // ===== TEMP TYPE SELECT FOR DEVELOPMENT ONLY =====
-  // REMOVE AFTER AI TYPE PREDICTION IS INTEGRATED
   const [typeId, setTypeId] = useState(1);
-  // ===== END TEMP TYPE SELECT =====
+
 
   const [loading, setLoading] =
     useState(false);
@@ -114,53 +112,25 @@ export default function AddItemVerify({
             }}
           >
             <h2>Verify Item</h2>
+            <label>Type</label>
 
-            {/* TEMP TYPE */}
-
-            <div
-              style={{
-                border:
-                  "2px solid #C62828",
-                backgroundColor:
-                  "#FDECEC",
-                borderRadius: "16px",
-                padding: "1rem",
-              }}
+            <select
+            value={typeId}
+            onChange={(e) =>
+                setTypeId(
+                Number(e.target.value)
+                )
+            }
             >
-              <p
-                style={{
-                  color: "#C62828",
-                  fontWeight: 700,
-                  marginBottom: "0.5rem",
-                }}
-              >
-                TEMP DEV ONLY
-                <br />
-                Remove after AI integration
-              </p>
-
-              <label>Type</label>
-
-              <select
-                value={typeId}
-                onChange={(e) =>
-                  setTypeId(
-                    Number(
-                      e.target.value
-                    )
-                  )
-                }
-              >
-                {TYPES.map((t) => (
-                  <option
-                    key={t.id}
-                    value={t.id}
-                  >
-                    {t.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {TYPES.map((t) => (
+                <option
+                key={t.id}
+                value={t.id}
+                >
+                {t.name}
+                </option>
+            ))}
+            </select>
 
             <label>Color</label>
 
