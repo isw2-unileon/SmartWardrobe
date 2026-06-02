@@ -1,5 +1,13 @@
 import MainMenu from "../../components/MainMenu";
+import { getClothingItems } from "@/services/getClothing";
 
-export default function MainMenuPage() {
-  return <MainMenu />;
+export default async function MainMenuPage() {
+  const clothingItems =
+    await getClothingItems();
+
+  return (
+    <MainMenu
+      clothingItems={clothingItems}
+    />
+  );
 }
