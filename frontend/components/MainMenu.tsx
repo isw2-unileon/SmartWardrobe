@@ -21,6 +21,7 @@ export default function MainMenu({
 }: {
   clothingItems: ClothingItem[];
 }) {
+
   const router = useRouter();
 
   const [selectedItem, setSelectedItem] =
@@ -61,10 +62,10 @@ export default function MainMenu({
             marginBottom: "1rem",
           }}
         >
-          <form action={signOut}>
-            <button type="submit">
-              Log Out
-            </button>
+                    <form action={signOut}>
+          <button type="submit">
+            Log Out
+          </button>
           </form>
         </div>
 
@@ -91,13 +92,13 @@ export default function MainMenu({
               gap: "1rem",
             }}
           >
-            <button
-              onClick={() =>
-                router.push("/addItem")
-              }
-            >
-              Add Item
-            </button>
+          <button
+            onClick={() =>
+              router.push("/addItem")
+            }
+          >
+            Add Item
+          </button>
 
             <button
               onClick={() =>
