@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { signOut } from "@/services/auth";
 import { deleteClothing }
 from "@/services/deleteClothing";
-
 import { useTransition }
 from "react";
 
@@ -28,7 +27,14 @@ export default function MainMenu({
     useState<ClothingItem | null>(
       null
     );
+  const [confirmDelete,
+  setConfirmDelete] =
+    useState(false);
 
+  const [isPending,
+  startTransition] =
+    useTransition();
+    
   return (
     <div
       style={{
@@ -186,8 +192,7 @@ export default function MainMenu({
                     "1px solid #B8A391",
                   padding: "1.5rem",
                   display: "flex",
-                  flexDirection:
-                    "column",
+                  flexDirection: "column",
                   gap: "1rem",
                 }}
               >
@@ -200,37 +205,90 @@ export default function MainMenu({
                     width: "100%",
                     aspectRatio: "1",
                     objectFit: "cover",
-                    borderRadius:
-                      "16px",
+                    borderRadius: "16px",
                   }}
                 />
 
-                <button
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  Modify
-                </button>
+                {!confirmDelete ? (
+                  <>
+                    <button
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      Modify
+                    </button>
 
-                <button
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  Remove
-                </button>
+                    <button
+                      style={{
+                        width: "100%",
+                      }}
+                      onClick={() =>
+                        setConfirmDelete(
+                          true
+                        )
+                      }
+                    >
+                      Remove
+                    </button>
 
-                <button
-                  onClick={() =>
-                    setSelectedItem(null)
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  Close
-                </button>
+                    <button
+                      style={{
+                        width: "100%",
+                      }}
+                      onClick={() =>
+                        setSelectedItem(
+                          null
+                        )
+                      }
+                    >
+                      Close
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      Are you sure?
+                    </p>
+
+                    <button
+                      style={{
+                        width: "100%",
+                      }}
+                      disabled={isPending}
+                      onClick={() =>
+                        startTransition(
+                          async () => {
+                            await deleteClothing(
+                              selectedItem.id
+                            );
+
+                            window.location.reload();
+                          }
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
+
+                    <button
+                      style={{
+                        width: "100%",
+                      }}
+                      onClick={() =>
+                        setConfirmDelete(
+                          false
+                        )
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
