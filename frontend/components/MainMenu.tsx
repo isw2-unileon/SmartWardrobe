@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/services/auth";
+import { deleteClothing }
+from "@/services/deleteClothing";
+
+import { useTransition }
+from "react";
 
 type ClothingItem = {
   id: number;
