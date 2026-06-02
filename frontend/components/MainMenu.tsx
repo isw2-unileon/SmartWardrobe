@@ -108,7 +108,7 @@ export default function MainMenu({
               Search Item
             </button>
           </div>
-
+g
           {/* GRID + PANEL */}
 
           <div
@@ -141,7 +141,7 @@ export default function MainMenu({
                   gap: "1rem",
                 }}
               >
-                {clothingItems.map(
+                {(clothingItems??[]).map(
                   (item) => (
                     <div
                       key={item.id}

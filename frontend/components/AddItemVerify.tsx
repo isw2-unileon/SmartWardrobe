@@ -52,16 +52,29 @@ export default function AddItemVerify({ imageUrl }: { imageUrl: string }) {
   const [typeId, setTypeId] = useState(1);
 
   const [loading, setLoading] = useState(false);
+  
+  const typeName =
+    TYPES.find((t) => t.id === typeId)?.name || "";
+
+  const colorName =
+    COLORS.find((c) => c.id === colorId)?.name || "";
+
+  const styleName =
+    STYLES.find((s) => s.id === styleId)?.name || "";
+
 
   const handleSave = async () => {
     setLoading(true);
+  await saveClothingItem({
+    imageUrl,
+    colorId,
+    styleId,
+    typeId,
 
-    await saveClothingItem({
-      imageUrl,
-      colorId,
-      styleId,
-      typeId,
-    });
+    colorName,
+    styleName,
+    typeName,
+  });
 
     router.push("/mainMenu");
   };

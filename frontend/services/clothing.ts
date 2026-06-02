@@ -8,6 +8,10 @@ type SaveParams = {
   colorId: number;
   styleId: number;
   imageUrl: string;
+
+  typeName: string;
+  colorName: string;
+  styleName: string;
 };
 
 export async function saveClothingItem({
@@ -15,7 +19,10 @@ export async function saveClothingItem({
   colorId,
   styleId,
   imageUrl,
-}: SaveParams) {
+  typeName,
+  colorName,
+  styleName,
+}: SaveParams){
   const cookieStore =
     await cookies();
 
@@ -51,17 +58,20 @@ export async function saveClothingItem({
         },
 
         body: JSON.stringify({
-          type: {
-            id: typeId,
-          },
+         type: {
+          id: typeId,
+          name: typeName,
+        },
 
-          color: {
-            id: colorId,
-          },
+        color: {
+          id: colorId,
+          name: colorName,
+        },
 
-          style: {
-            id: styleId,
-          },
+        style: {
+          id: styleId,
+          name: styleName,
+        },
 
           imageUrl,
         }),
