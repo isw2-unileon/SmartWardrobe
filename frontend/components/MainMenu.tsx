@@ -69,8 +69,8 @@ export default function MainMenu() {
             }}
           >
             <button
-              onClick={() => router.push("/addItem")}
-            >
+            onClick={() => router.push("/addItem")}
+           >
               Add Item
             </button>
 
