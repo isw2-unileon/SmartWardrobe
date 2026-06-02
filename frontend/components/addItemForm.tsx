@@ -22,24 +22,24 @@ export default function AddItemForm() {
   };
 
   const handleUpload = async () => {
-  if (!file) return;
+    if (!file) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  const formData = new FormData();
-  formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-  const imageUrl =
-    await uploadImage(formData);
+    const imageUrl =
+      await uploadImage(formData);
 
-  setLoading(false);
+    setLoading(false);
 
-  router.push(
-    `/addItem/verify?imageUrl=${encodeURIComponent(
-      imageUrl
-    )}`
-  );
-};
+    router.push(
+      `/addItem/verify?imageUrl=${encodeURIComponent(
+        imageUrl
+      )}`
+    );
+  };
 
   return (
     <div className="page-container">
@@ -66,11 +66,53 @@ export default function AddItemForm() {
             gap: "1.5rem",
           }}
         >
+          <p
+            style={{
+              textAlign: "center",
+              fontWeight: 600,
+              margin: 0,
+              color: "#4B3A2F",
+            }}
+          >
+            Select your clothing item
+          </p>
+
           <input
+            id="file-upload"
             type="file"
             accept="image/*"
             onChange={handleFile}
+            style={{ display: "none" }}
           />
+
+          <label
+            htmlFor="file-upload"
+            style={{
+              backgroundColor: "#6D8B74",
+              color: "white",
+              borderRadius: "12px",
+              padding: "12px 24px",
+              fontWeight: 600,
+              cursor: "pointer",
+              width: "fit-content",
+              alignSelf: "center",
+            }}
+          >
+            Choose Image
+          </label>
+
+          <p
+            style={{
+              textAlign: "center",
+              color: "#7B6A5E",
+              margin: 0,
+              minHeight: "20px",
+            }}
+          >
+            {file
+              ? file.name
+              : "No image selected"}
+          </p>
 
           {preview && (
             <div
@@ -87,9 +129,7 @@ export default function AddItemForm() {
                 style={{
                   width: "100%",
                   height: "350px",
-
                   objectFit: "contain",
-
                   borderRadius: "16px",
                 }}
               />
