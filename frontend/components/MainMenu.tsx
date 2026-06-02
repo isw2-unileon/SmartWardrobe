@@ -1,13 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/services/auth";
 
+type ClothingItem = {
+  id: number;
+  image_url: string;
+  type_id: number;
+  color_id: number;
+  style_id: number;
+};
 
-export default function MainMenu() {
+export default function MainMenu({
+  clothingItems,
+}: {
+  clothingItems: ClothingItem[];
+}) {
   const router = useRouter();
 
-  const mockItems = Array.from({ length: 24 });
+  const [selectedItem, setSelectedItem] =
+    useState<ClothingItem | null>(
+      null
+    );
 
   return (
     <div
@@ -19,15 +34,15 @@ export default function MainMenu() {
         padding: "2rem",
       }}
     >
-      {/* LOG OUT OUTSIDE */}
-
       <div
         style={{
           width: "100%",
-          maxWidth: "1150px",
+          maxWidth: "1250px",
           position: "relative",
         }}
       >
+        {/* LOG OUT */}
+
         <div
           style={{
             display: "flex",
@@ -35,10 +50,10 @@ export default function MainMenu() {
             marginBottom: "1rem",
           }}
         >
-         <form action={signOut}>
-           <button type="submit">
-             Log Out
-             </button>
+          <form action={signOut}>
+            <button type="submit">
+              Log Out
+            </button>
           </form>
         </div>
 
@@ -49,18 +64,15 @@ export default function MainMenu() {
             backgroundColor: "#C8B6A6",
             borderRadius: "28px",
             padding: "2rem",
-
             border: "1px solid #B8A391",
-
             boxShadow:
               "0 10px 25px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.03)",
-
             display: "flex",
             flexDirection: "column",
             gap: "1.8rem",
           }}
         >
-          {/* TOP ACTIONS */}
+          {/* TOP */}
 
           <div
             style={{
@@ -69,57 +81,144 @@ export default function MainMenu() {
             }}
           >
             <button
-            onClick={() => router.push("/addItem")}
-           >
+              onClick={() =>
+                router.push("/addItem")
+              }
+            >
               Add Item
             </button>
 
-            <button onClick={() => router.push("/searchItem")}>
+            <button
+              onClick={() =>
+                router.push("/searchItem")
+              }
+            >
               Search Item
             </button>
           </div>
 
-          {/* WARDROBE */}
+          {/* GRID + PANEL */}
 
           <div
             style={{
-              backgroundColor: "#FFFDFB",
-
-              borderRadius: "24px",
-
-              border: "1px solid #B8A391",
-
-              padding: "1.25rem",
-
-              height: "470px",
-
-              overflowY: "auto",
+              display: "flex",
+              gap: "1.5rem",
+              alignItems: "stretch",
             }}
           >
+            {/* WARDROBE */}
+
             <div
               style={{
-                display: "grid",
-
-                gridTemplateColumns: "repeat(4, 1fr)",
-
-                gap: "1rem",
+                flex: 1,
+                backgroundColor:
+                  "#FFFDFB",
+                borderRadius: "24px",
+                border:
+                  "1px solid #B8A391",
+                padding: "1.25rem",
+                height: "470px",
+                overflowY: "auto",
               }}
             >
-              {mockItems.map((_, index) => (
-                <div
-                  key={index}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    "repeat(4,1fr)",
+                  gap: "1rem",
+                }}
+              >
+                {clothingItems.map(
+                  (item) => (
+                    <div
+                      key={item.id}
+                      onClick={() =>
+                        setSelectedItem(
+                          item
+                        )
+                      }
+                      style={{
+                        aspectRatio: "1",
+                        borderRadius:
+                          "18px",
+                        border:
+                          "2px solid #B8A391",
+                        backgroundColor:
+                          "#FCFAF7",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <img
+                        src={
+                          item.image_url
+                        }
+                        alt="clothing"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit:
+                            "cover",
+                        }}
+                      />
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            {/* SIDE PANEL */}
+
+            {selectedItem && (
+              <div
+                style={{
+                  width: "220px",
+                  backgroundColor:
+                    "#FFFDFB",
+                  borderRadius: "24px",
+                  border:
+                    "1px solid #B8A391",
+                  padding: "1.5rem",
+                  display: "flex",
+                  flexDirection:
+                    "column",
+                  gap: "1rem",
+                }}
+              >
+                <img
+                  src={
+                    selectedItem.image_url
+                  }
+                  alt="preview"
                   style={{
+                    width: "100%",
                     aspectRatio: "1",
-
-                    borderRadius: "18px",
-
-                    border: "2px solid #B8A391",
-
-                    backgroundColor: "#FCFAF7",
+                    objectFit: "cover",
+                    borderRadius:
+                      "16px",
                   }}
                 />
-              ))}
-            </div>
+
+                <button>
+                  Modify
+                </button>
+
+                <button>
+                  Remove
+                </button>
+
+                <button
+                  onClick={() =>
+                    setSelectedItem(
+                      null
+                    )
+                  }
+                >
+                  Close
+                </button>
+              </div>
+            )}
           </div>
 
           {/* CREATE OUTFIT */}
@@ -140,15 +239,33 @@ export default function MainMenu() {
                 flexWrap: "wrap",
               }}
             >
-              <button onClick={() => router.push("/createOutfit/today")}>
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/today"
+                  )
+                }
+              >
                 Today
               </button>
 
-              <button onClick={() => router.push("/createOutfit/tomorrow")}>
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/tomorrow"
+                  )
+                }
+              >
                 Tomorrow
               </button>
 
-              <button onClick={() => router.push("/createOutfit/week")}>
+              <button
+                onClick={() =>
+                  router.push(
+                    "/createOutfit/week"
+                  )
+                }
+              >
                 For a Week
               </button>
             </div>
