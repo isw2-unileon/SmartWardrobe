@@ -16,6 +16,18 @@ type MockClothingItemRepository struct {
 	mock.Mock
 }
 
+func (m *MockClothingItemRepository) GetByID(id int64) (*models.ClothingItem, error) {
+	args := m.Called(id)
+
+	var item *models.ClothingItem
+
+	if args.Get(0) != nil {
+		item = args.Get(0).(*models.ClothingItem)
+	}
+
+	return item, args.Error(1)
+}
+
 func (m *MockClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
 	args := m.Called()
 	return args.Get(0).([]models.ClothingItem), args.Error(1)
