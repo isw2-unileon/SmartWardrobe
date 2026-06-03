@@ -10,10 +10,23 @@ from "react";
 
 type ClothingItem = {
   id: number;
-  image_url: string;
-  type_id: number;
-  color_id: number;
-  style_id: number;
+
+  imageUrl: string;
+
+  type: {
+    id: number;
+    name: string;
+  };
+
+  color: {
+    id: number;
+    name: string;
+  };
+
+  style: {
+    id: number;
+    name: string;
+  };
 };
 
 export default function MainMenu({
@@ -164,7 +177,7 @@ g
                     >
                       <img
                         src={
-                          item.image_url
+                          item.imageUrl
                         }
                         alt="clothing"
                         style={{
@@ -199,7 +212,7 @@ g
               >
                 <img
                   src={
-                    selectedItem.image_url
+                    selectedItem.imageUrl
                   }
                   alt="preview"
                   style={{
