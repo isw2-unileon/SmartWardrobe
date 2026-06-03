@@ -265,6 +265,97 @@ export default function MainMenu({
             </div>
 
             {/* SIDE PANEL */}
+           {searchOpen && (
+              <div
+                style={{
+                  width: "220px",
+                  backgroundColor: "#FFFDFB",
+                  borderRadius: "24px",
+                  border: "1px solid #B8A391",
+                  padding: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                <h3>Search Filters</h3>
+
+                <label>Type</label>
+                <select
+                  value={filterTypeId ?? ""}
+                  onChange={(e) =>
+                    setFilterTypeId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {TYPES.map((t) => (
+                    <option
+                      key={t.id}
+                      value={t.id}
+                    >
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+
+                <label>Color</label>
+                <select
+                  value={filterColorId ?? ""}
+                  onChange={(e) =>
+                    setFilterColorId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {COLORS.map((c) => (
+                    <option
+                      key={c.id}
+                      value={c.id}
+                    >
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+
+                <label>Style</label>
+                <select
+                  value={filterStyleId ?? ""}
+                  onChange={(e) =>
+                    setFilterStyleId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {STYLES.map((s) => (
+                    <option
+                      key={s.id}
+                      value={s.id}
+                    >
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {selectedItem && (
               <div
