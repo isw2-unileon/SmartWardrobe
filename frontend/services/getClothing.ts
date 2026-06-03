@@ -6,36 +6,30 @@ import { createClient } from "@/utils/supabase/server";
 export async function getClothingItems() {
   const cookieStore = await cookies();
 
-  const supabase =
-    createClient(cookieStore);
+  const supabase = createClient(cookieStore);
 
   const {
     data: { session },
-  } =
-    await supabase.auth.getSession(); 
+  } = await supabase.auth.getSession();
 
-  const token =
-    session?.access_token;
+  const token = session?.access_token;
 
   if (!token) {
     return [];
   }
 
-  const response =
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/filters`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        cache: "no-store",
-      }
-    );
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItems`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    },
+  );
 
   if (!response.ok) {
-    throw new Error(
-      "Failed to load clothing items"
-    );
+    throw new Error("Failed to load clothing items");
   }
 
   return await response.json();

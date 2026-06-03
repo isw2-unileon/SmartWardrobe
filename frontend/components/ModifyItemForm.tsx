@@ -65,37 +65,22 @@ type Props = {
   };
 };
 
-export default function ModifyItemForm({
-  item,
-}: Props) {
+export default function ModifyItemForm({ item }: Props) {
   const router = useRouter();
 
-  const [typeId, setTypeId] =
-    useState(item.type.id);
+  const [typeId, setTypeId] = useState(item.type.id);
 
-  const [colorId, setColorId] =
-    useState(item.color.id);
+  const [colorId, setColorId] = useState(item.color.id);
 
-  const [styleId, setStyleId] =
-    useState(item.style.id);
+  const [styleId, setStyleId] = useState(item.style.id);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const typeName =
-    TYPES.find(
-      (t) => t.id === typeId
-    )?.name || "";
+  const typeName = TYPES.find((t) => t.id === typeId)?.name || "";
 
-  const colorName =
-    COLORS.find(
-      (c) => c.id === colorId
-    )?.name || "";
+  const colorName = COLORS.find((c) => c.id === colorId)?.name || "";
 
-  const styleName =
-    STYLES.find(
-      (s) => s.id === styleId
-    )?.name || "";
+  const styleName = STYLES.find((s) => s.id === styleId)?.name || "";
 
   const handleSave = async () => {
     setLoading(true);
@@ -103,8 +88,7 @@ export default function ModifyItemForm({
     await updateClothing({
       id: item.id,
 
-      imageUrl:
-        item.imageUrl,
+      imageUrl: item.imageUrl,
 
       typeId,
       typeName,
@@ -131,8 +115,7 @@ export default function ModifyItemForm({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns:
-              "1fr 1fr",
+            gridTemplateColumns: "1fr 1fr",
             gap: "2rem",
             alignItems: "start",
           }}
@@ -144,12 +127,9 @@ export default function ModifyItemForm({
               style={{
                 width: "100%",
                 height: "420px",
-                objectFit:
-                  "contain",
-                borderRadius:
-                  "20px",
-                border:
-                  "1px solid #E5D8CC",
+                objectFit: "contain",
+                borderRadius: "20px",
+                border: "1px solid #E5D8CC",
               }}
             />
           </div>
@@ -157,8 +137,7 @@ export default function ModifyItemForm({
           <div
             style={{
               display: "flex",
-              flexDirection:
-                "column",
+              flexDirection: "column",
               gap: "1.2rem",
             }}
           >
@@ -168,19 +147,10 @@ export default function ModifyItemForm({
 
             <select
               value={typeId}
-              onChange={(e) =>
-                setTypeId(
-                  Number(
-                    e.target.value
-                  )
-                )
-              }
+              onChange={(e) => setTypeId(Number(e.target.value))}
             >
               {TYPES.map((t) => (
-                <option
-                  key={t.id}
-                  value={t.id}
-                >
+                <option key={t.id} value={t.id}>
                   {t.name}
                 </option>
               ))}
@@ -190,19 +160,10 @@ export default function ModifyItemForm({
 
             <select
               value={colorId}
-              onChange={(e) =>
-                setColorId(
-                  Number(
-                    e.target.value
-                  )
-                )
-              }
+              onChange={(e) => setColorId(Number(e.target.value))}
             >
               {COLORS.map((c) => (
-                <option
-                  key={c.id}
-                  value={c.id}
-                >
+                <option key={c.id} value={c.id}>
                   {c.name}
                 </option>
               ))}
@@ -212,33 +173,17 @@ export default function ModifyItemForm({
 
             <select
               value={styleId}
-              onChange={(e) =>
-                setStyleId(
-                  Number(
-                    e.target.value
-                  )
-                )
-              }
+              onChange={(e) => setStyleId(Number(e.target.value))}
             >
               {STYLES.map((s) => (
-                <option
-                  key={s.id}
-                  value={s.id}
-                >
+                <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
               ))}
             </select>
 
-            <button
-              disabled={loading}
-              onClick={
-                handleSave
-              }
-            >
-              {loading
-                ? "Saving..."
-                : "Save Changes"}
+            <button disabled={loading} onClick={handleSave}>
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>

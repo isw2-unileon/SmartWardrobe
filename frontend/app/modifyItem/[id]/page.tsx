@@ -8,14 +8,7 @@ export default async function ModifyItemPage({
 }) {
   const { id } = await params;
 
-  const item =
-    await getClothingById(
-      Number(id)
-    );
+  const item = await getClothingById(Number(id));
 
-  return (
-    <ModifyItemForm
-      item={item}
-    />
-  );
+  return <ModifyItemForm item={item} />;
 }

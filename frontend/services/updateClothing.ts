@@ -28,69 +28,56 @@ export async function updateClothing({
   styleName,
   imageUrl,
 }: UpdateParams) {
-  const cookieStore =
-    await cookies();
+  const cookieStore = await cookies();
 
-  const supabase =
-    createClient(cookieStore);
+  const supabase = createClient(cookieStore);
 
   const {
     data: { session },
-  } =
-    await supabase.auth.getSession();
+  } = await supabase.auth.getSession();
 
-  const token =
-    session?.access_token;
+  const token = session?.access_token;
 
   if (!token) {
-    throw new Error(
-      "No session found"
-    );
+    throw new Error("No session found");
   }
 
-  const response =
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/${id}`,
-      {
-        method: "PUT",
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/${id}`,
+    {
+      method: "PUT",
 
-        headers: {
-          "Content-Type":
-            "application/json",
+      headers: {
+        "Content-Type": "application/json",
 
-          Authorization:
-            `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+      },
+
+      body: JSON.stringify({
+        type: {
+          id: typeId,
+          name: typeName,
         },
 
-        body: JSON.stringify({
-          type: {
-            id: typeId,
-            name: typeName,
-          },
+        color: {
+          id: colorId,
+          name: colorName,
+        },
 
-          color: {
-            id: colorId,
-            name: colorName,
-          },
+        style: {
+          id: styleId,
+          name: styleName,
+        },
 
-          style: {
-            id: styleId,
-            name: styleName,
-          },
-
-          imageUrl,
-        }),
-      }
-    );
+        imageUrl,
+      }),
+    },
+  );
 
   if (!response.ok) {
-    const error =
-      await response.json();
+    const error = await response.json();
 
-    throw new Error(
-      error.error ||
-        "Failed to update clothing"
-    );
+    throw new Error(error.error || "Failed to update clothing");
   }
 
   return await response.json();

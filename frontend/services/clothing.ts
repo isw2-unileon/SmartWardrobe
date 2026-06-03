@@ -22,43 +22,34 @@ export async function saveClothingItem({
   typeName,
   colorName,
   styleName,
-}: SaveParams){
-  const cookieStore =
-    await cookies();
+}: SaveParams) {
+  const cookieStore = await cookies();
 
-  const supabase =
-    createClient(cookieStore);
+  const supabase = createClient(cookieStore);
 
   const {
     data: { session },
-  } =
-    await supabase.auth.getSession();
+  } = await supabase.auth.getSession();
 
-  const token =
-    session?.access_token;
+  const token = session?.access_token;
 
   if (!token) {
-    throw new Error(
-      "No session found"
-    );
+    throw new Error("No session found");
   }
 
-  const response =
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem`,
-      {
-        method: "POST",
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem`,
+    {
+      method: "POST",
 
-        headers: {
-          "Content-Type":
-            "application/json",
+      headers: {
+        "Content-Type": "application/json",
 
-          Authorization:
-            `Bearer ${token}`,
-        },
+        Authorization: `Bearer ${token}`,
+      },
 
-        body: JSON.stringify({
-         type: {
+      body: JSON.stringify({
+        type: {
           id: typeId,
           name: typeName,
         },
@@ -73,19 +64,15 @@ export async function saveClothingItem({
           name: styleName,
         },
 
-          imageUrl,
-        }),
-      }
-    );
+        imageUrl,
+      }),
+    },
+  );
 
   if (!response.ok) {
-    const error =
-      await response.json();
+    const error = await response.json();
 
-    throw new Error(
-      error.error ||
-        "Failed to save clothing"
-    );
+    throw new Error(error.error || "Failed to save clothing");
   }
 
   return await response.json();

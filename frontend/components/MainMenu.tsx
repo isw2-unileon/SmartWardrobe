@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/services/auth";
-import { deleteClothing }
-from "@/services/deleteClothing";
-import { useTransition }
-from "react";
+import { deleteClothing } from "@/services/deleteClothing";
+import { useTransition } from "react";
 
 const COLORS = [
   { id: 1, name: "Black" },
@@ -47,7 +45,6 @@ const TYPES = [
   { id: 16, name: "Heels" },
 ];
 
-
 type ClothingItem = {
   id: number;
 
@@ -74,49 +71,29 @@ export default function MainMenu({
 }: {
   clothingItems: ClothingItem[];
 }) {
-
   const router = useRouter();
 
+  const [filterTypeId, setFilterTypeId] = useState<number | null>(null);
 
-  const [filterTypeId, setFilterTypeId] =
-    useState<number | null>(null);
+  const [filterColorId, setFilterColorId] = useState<number | null>(null);
 
-  const [filterColorId, setFilterColorId] =
-    useState<number | null>(null);
+  const [filterStyleId, setFilterStyleId] = useState<number | null>(null);
 
-  const [filterStyleId, setFilterStyleId] =
-    useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<ClothingItem | null>(null);
 
-  const [selectedItem, setSelectedItem] =
-    useState<ClothingItem | null>(
-      null
-    );
-  
-    const [searchOpen, setSearchOpen] =
-  useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  const [confirmDelete,
-  setConfirmDelete] =
-    useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const [isPending,
-  startTransition] =
-    useTransition();
+  const [isPending, startTransition] = useTransition();
 
-  const filteredItems =
-  clothingItems.filter(
+  const filteredItems = clothingItems.filter(
     (item) =>
-      (!filterTypeId ||
-        item.type?.id ===
-          filterTypeId) &&
-      (!filterColorId ||
-        item.color?.id ===
-          filterColorId) &&
-      (!filterStyleId ||
-        item.style?.id ===
-          filterStyleId)
-  );  
-    
+      (!filterTypeId || item.type?.id === filterTypeId) &&
+      (!filterColorId || item.color?.id === filterColorId) &&
+      (!filterStyleId || item.style?.id === filterStyleId),
+  );
+
   return (
     <div
       style={{
@@ -143,10 +120,8 @@ export default function MainMenu({
             marginBottom: "1rem",
           }}
         >
-                    <form action={signOut}>
-          <button type="submit">
-            Log Out
-          </button>
+          <form action={signOut}>
+            <button type="submit">Log Out</button>
           </form>
         </div>
 
@@ -173,25 +148,22 @@ export default function MainMenu({
               gap: "1rem",
             }}
           >
-          <button
-            onClick={() => {
-              
-              router.push("/addItem")
-            }}
-          >
-            Add Item
-          </button>
+            <button
+              onClick={() => {
+                router.push("/addItem");
+              }}
+            >
+              Add Item
+            </button>
 
             <button
               onClick={() => {
                 setSelectedItem(null);
-                setSearchOpen(
-                  !searchOpen
-                );
+                setSearchOpen(!searchOpen);
               }}
             >
-            Search Item
-          </button>
+              Search Item
+            </button>
           </div>
 
           {/* GRID + PANEL */}
@@ -207,11 +179,9 @@ export default function MainMenu({
             <div
               style={{
                 flex: 1,
-                backgroundColor:
-                  "#FFFDFB",
+                backgroundColor: "#FFFDFB",
                 borderRadius: "24px",
-                border:
-                  "1px solid #B8A391",
+                border: "1px solid #B8A391",
                 padding: "1.25rem",
                 height: "470px",
                 overflowY: "auto",
@@ -220,52 +190,39 @@ export default function MainMenu({
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns:
-                    "repeat(4,1fr)",
+                  gridTemplateColumns: "repeat(4,1fr)",
                   gap: "1rem",
                 }}
               >
-                {(filteredItems ?? []).map(
-                  (item) => (
-                    <div
-                      key={item.id}
-                      onClick={() =>
-                        setSelectedItem(
-                          item
-                        )
-                      }
+                {(filteredItems ?? []).map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedItem(item)}
+                    style={{
+                      aspectRatio: "1",
+                      borderRadius: "18px",
+                      border: "2px solid #B8A391",
+                      backgroundColor: "#FCFAF7",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={item.imageUrl}
+                      alt="clothing"
                       style={{
-                        aspectRatio: "1",
-                        borderRadius:
-                          "18px",
-                        border:
-                          "2px solid #B8A391",
-                        backgroundColor:
-                          "#FCFAF7",
-                        overflow: "hidden",
-                        cursor: "pointer",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
                       }}
-                    >
-                      <img
-                        src={
-                          item.imageUrl
-                        }
-                        alt="clothing"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit:
-                            "cover",
-                        }}
-                      />
-                    </div>
-                  )
-                )}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* SIDE PANEL */}
-           {searchOpen && (
+            {searchOpen && (
               <div
                 style={{
                   width: "220px",
@@ -285,21 +242,14 @@ export default function MainMenu({
                   value={filterTypeId ?? ""}
                   onChange={(e) =>
                     setFilterTypeId(
-                      e.target.value
-                        ? Number(e.target.value)
-                        : null
+                      e.target.value ? Number(e.target.value) : null,
                     )
                   }
                 >
-                  <option value="">
-                    All
-                  </option>
+                  <option value="">All</option>
 
                   {TYPES.map((t) => (
-                    <option
-                      key={t.id}
-                      value={t.id}
-                    >
+                    <option key={t.id} value={t.id}>
                       {t.name}
                     </option>
                   ))}
@@ -310,21 +260,14 @@ export default function MainMenu({
                   value={filterColorId ?? ""}
                   onChange={(e) =>
                     setFilterColorId(
-                      e.target.value
-                        ? Number(e.target.value)
-                        : null
+                      e.target.value ? Number(e.target.value) : null,
                     )
                   }
                 >
-                  <option value="">
-                    All
-                  </option>
+                  <option value="">All</option>
 
                   {COLORS.map((c) => (
-                    <option
-                      key={c.id}
-                      value={c.id}
-                    >
+                    <option key={c.id} value={c.id}>
                       {c.name}
                     </option>
                   ))}
@@ -335,21 +278,14 @@ export default function MainMenu({
                   value={filterStyleId ?? ""}
                   onChange={(e) =>
                     setFilterStyleId(
-                      e.target.value
-                        ? Number(e.target.value)
-                        : null
+                      e.target.value ? Number(e.target.value) : null,
                     )
                   }
                 >
-                  <option value="">
-                    All
-                  </option>
+                  <option value="">All</option>
 
                   {STYLES.map((s) => (
-                    <option
-                      key={s.id}
-                      value={s.id}
-                    >
+                    <option key={s.id} value={s.id}>
                       {s.name}
                     </option>
                   ))}
@@ -361,11 +297,9 @@ export default function MainMenu({
               <div
                 style={{
                   width: "220px",
-                  backgroundColor:
-                    "#FFFDFB",
+                  backgroundColor: "#FFFDFB",
                   borderRadius: "24px",
-                  border:
-                    "1px solid #B8A391",
+                  border: "1px solid #B8A391",
                   padding: "1.5rem",
                   display: "flex",
                   flexDirection: "column",
@@ -373,9 +307,7 @@ export default function MainMenu({
                 }}
               >
                 <img
-                  src={
-                    selectedItem.imageUrl
-                  }
+                  src={selectedItem.imageUrl}
                   alt="preview"
                   style={{
                     width: "100%",
@@ -392,9 +324,7 @@ export default function MainMenu({
                         width: "100%",
                       }}
                       onClick={() =>
-                        router.push(
-                          `/modifyItem/${selectedItem.id}`
-                        )
+                        router.push(`/modifyItem/${selectedItem.id}`)
                       }
                     >
                       Modify
@@ -403,11 +333,7 @@ export default function MainMenu({
                       style={{
                         width: "100%",
                       }}
-                      onClick={() =>
-                        setConfirmDelete(
-                          true
-                        )
-                      }
+                      onClick={() => setConfirmDelete(true)}
                     >
                       Remove
                     </button>
@@ -416,11 +342,7 @@ export default function MainMenu({
                       style={{
                         width: "100%",
                       }}
-                      onClick={() =>
-                        setSelectedItem(
-                          null
-                        )
-                      }
+                      onClick={() => setSelectedItem(null)}
                     >
                       Close
                     </button>
@@ -441,15 +363,11 @@ export default function MainMenu({
                       }}
                       disabled={isPending}
                       onClick={() =>
-                        startTransition(
-                          async () => {
-                            await deleteClothing(
-                              selectedItem.id
-                            );
+                        startTransition(async () => {
+                          await deleteClothing(selectedItem.id);
 
-                            window.location.reload();
-                          }
-                        )
+                          window.location.reload();
+                        })
                       }
                     >
                       Delete
@@ -468,16 +386,12 @@ export default function MainMenu({
                     >
                       Clear Filters
                     </button>
-                    
+
                     <button
                       style={{
                         width: "100%",
                       }}
-                      onClick={() =>
-                        setConfirmDelete(
-                          false
-                        )
-                      }
+                      onClick={() => setConfirmDelete(false)}
                     >
                       Cancel
                     </button>
@@ -505,33 +419,15 @@ export default function MainMenu({
                 flexWrap: "wrap",
               }}
             >
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/today"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/today")}>
                 Today
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/tomorrow"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/tomorrow")}>
                 Tomorrow
               </button>
 
-              <button
-                onClick={() =>
-                  router.push(
-                    "/createOutfit/week"
-                  )
-                }
-              >
+              <button onClick={() => router.push("/createOutfit/week")}>
                 For a Week
               </button>
             </div>
