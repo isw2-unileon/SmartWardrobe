@@ -8,6 +8,59 @@ from "@/services/deleteClothing";
 import { useTransition }
 from "react";
 
+const [searchOpen, setSearchOpen] =
+  useState(false);
+
+const [filterTypeId, setFilterTypeId] =
+  useState<number | null>(null);
+
+const [filterColorId, setFilterColorId] =
+  useState<number | null>(null);
+
+const [filterStyleId, setFilterStyleId] =
+  useState<number | null>(null);
+
+
+const COLORS = [
+  { id: 1, name: "Black" },
+  { id: 2, name: "White" },
+  { id: 3, name: "Gray" },
+  { id: 4, name: "Blue" },
+  { id: 5, name: "Red" },
+  { id: 6, name: "Green" },
+  { id: 7, name: "Yellow" },
+  { id: 8, name: "Brown" },
+  { id: 10, name: "Pink" },
+  { id: 11, name: "Purple" },
+  { id: 12, name: "Orange" },
+];
+
+const STYLES = [
+  { id: 1, name: "Casual" },
+  { id: 2, name: "Formal" },
+  { id: 3, name: "Sporty" },
+];
+
+const TYPES = [
+  { id: 1, name: "Tshirt" },
+  { id: 2, name: "Hoodie" },
+  { id: 3, name: "Sweater" },
+  { id: 4, name: "Jacket" },
+  { id: 5, name: "Coat" },
+  { id: 6, name: "Shorts" },
+  { id: 7, name: "Skirt" },
+  { id: 8, name: "Jeans" },
+  { id: 9, name: "Sandals" },
+  { id: 10, name: "Sneakers" },
+  { id: 11, name: "Boots" },
+  { id: 12, name: "Long-sleeve" },
+  { id: 13, name: "Top" },
+  { id: 14, name: "Overshirt" },
+  { id: 15, name: "Shoes" },
+  { id: 16, name: "Heels" },
+];
+
+
 type ClothingItem = {
   id: number;
 
