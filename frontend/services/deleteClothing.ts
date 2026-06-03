@@ -13,25 +13,41 @@ export async function deleteClothing(
     createClient(cookieStore);
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } =
+    await supabase.auth.getSession();
 
-  if (!user) {
+  const token =
+    session?.access_token;
+
+  if (!token) {
     throw new Error(
-      "Not authenticated"
+      "No session found"
     );
   }
 
-  const { error } =
-    await supabase
-      .from("clothing_items")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", user.id);
+  const response =
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/${id}`,
+      {
+        method: "DELETE",
 
-  if (error) {
+        headers: {
+          Authorization:
+            `Bearer ${token}`,
+        },
+      }
+    );
+
+  if (!response.ok) {
+    const error =
+      await response.json();
+
     throw new Error(
-      error.message
+      error.error ||
+        "Failed to delete clothing"
     );
   }
+
+  return await response.json();
 }

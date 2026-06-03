@@ -121,7 +121,7 @@ export default function MainMenu({
               Search Item
             </button>
           </div>
-g
+
           {/* GRID + PANEL */}
 
           <div
