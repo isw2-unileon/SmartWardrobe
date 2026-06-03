@@ -8,19 +8,6 @@ from "@/services/deleteClothing";
 import { useTransition }
 from "react";
 
-const [searchOpen, setSearchOpen] =
-  useState(false);
-
-const [filterTypeId, setFilterTypeId] =
-  useState<number | null>(null);
-
-const [filterColorId, setFilterColorId] =
-  useState<number | null>(null);
-
-const [filterStyleId, setFilterStyleId] =
-  useState<number | null>(null);
-
-
 const COLORS = [
   { id: 1, name: "Black" },
   { id: 2, name: "White" },
@@ -90,6 +77,16 @@ export default function MainMenu({
 
   const router = useRouter();
 
+
+  const [filterTypeId, setFilterTypeId] =
+    useState<number | null>(null);
+
+  const [filterColorId, setFilterColorId] =
+    useState<number | null>(null);
+
+  const [filterStyleId, setFilterStyleId] =
+    useState<number | null>(null);
+
   const [selectedItem, setSelectedItem] =
     useState<ClothingItem | null>(
       null
@@ -105,6 +102,20 @@ export default function MainMenu({
   const [isPending,
   startTransition] =
     useTransition();
+
+  const filteredItems =
+  clothingItems.filter(
+    (item) =>
+      (!filterTypeId ||
+        item.type?.id ===
+          filterTypeId) &&
+      (!filterColorId ||
+        item.color?.id ===
+          filterColorId) &&
+      (!filterStyleId ||
+        item.style?.id ===
+          filterStyleId)
+  );  
     
   return (
     <div
@@ -214,7 +225,7 @@ export default function MainMenu({
                   gap: "1rem",
                 }}
               >
-                {(clothingItems??[]).map(
+                {(filteredItems ?? []).map(
                   (item) => (
                     <div
                       key={item.id}
@@ -353,6 +364,20 @@ export default function MainMenu({
                       Delete
                     </button>
 
+                    <button
+                      style={{
+                        marginTop: "1rem",
+                        width: "100%",
+                      }}
+                      onClick={() => {
+                        setFilterTypeId(null);
+                        setFilterColorId(null);
+                        setFilterStyleId(null);
+                      }}
+                    >
+                      Clear Filters
+                    </button>
+                    
                     <button
                       style={{
                         width: "100%",
