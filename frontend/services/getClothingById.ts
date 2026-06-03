@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 
-export async function deleteClothing(
+export async function getClothingById(
   id: number
 ) {
   const cookieStore =
@@ -30,24 +30,21 @@ export async function deleteClothing(
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/${id}`,
       {
-        method: "DELETE",
-
         headers: {
           Authorization:
             `Bearer ${token}`,
         },
+        cache: "no-store",
       }
     );
 
   if (!response.ok) {
-    const error =
-      await response.json();
+  const text = await response.text();
 
-    throw new Error(
-      error.error ||
-        "Failed to delete clothing"
-    );
-  }
+  throw new Error(
+    `Status ${response.status}: ${text}`
+  );
+}
 
   return await response.json();
 }

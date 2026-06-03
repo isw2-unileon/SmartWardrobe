@@ -3,9 +3,31 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 
-export async function deleteClothing(
-  id: number
-) {
+type UpdateParams = {
+  id: number;
+
+  typeId: number;
+  typeName: string;
+
+  colorId: number;
+  colorName: string;
+
+  styleId: number;
+  styleName: string;
+
+  imageUrl: string;
+};
+
+export async function updateClothing({
+  id,
+  typeId,
+  typeName,
+  colorId,
+  colorName,
+  styleId,
+  styleName,
+  imageUrl,
+}: UpdateParams) {
   const cookieStore =
     await cookies();
 
@@ -30,12 +52,34 @@ export async function deleteClothing(
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/clothingItem/${id}`,
       {
-        method: "DELETE",
+        method: "PUT",
 
         headers: {
+          "Content-Type":
+            "application/json",
+
           Authorization:
             `Bearer ${token}`,
         },
+
+        body: JSON.stringify({
+          type: {
+            id: typeId,
+            name: typeName,
+          },
+
+          color: {
+            id: colorId,
+            name: colorName,
+          },
+
+          style: {
+            id: styleId,
+            name: styleName,
+          },
+
+          imageUrl,
+        }),
       }
     );
 
@@ -45,7 +89,7 @@ export async function deleteClothing(
 
     throw new Error(
       error.error ||
-        "Failed to delete clothing"
+        "Failed to update clothing"
     );
   }
 

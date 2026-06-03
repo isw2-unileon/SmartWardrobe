@@ -8,12 +8,65 @@ from "@/services/deleteClothing";
 import { useTransition }
 from "react";
 
+const COLORS = [
+  { id: 1, name: "Black" },
+  { id: 2, name: "White" },
+  { id: 3, name: "Gray" },
+  { id: 4, name: "Blue" },
+  { id: 5, name: "Red" },
+  { id: 6, name: "Green" },
+  { id: 7, name: "Yellow" },
+  { id: 8, name: "Brown" },
+  { id: 10, name: "Pink" },
+  { id: 11, name: "Purple" },
+  { id: 12, name: "Orange" },
+];
+
+const STYLES = [
+  { id: 1, name: "Casual" },
+  { id: 2, name: "Formal" },
+  { id: 3, name: "Sporty" },
+];
+
+const TYPES = [
+  { id: 1, name: "Tshirt" },
+  { id: 2, name: "Hoodie" },
+  { id: 3, name: "Sweater" },
+  { id: 4, name: "Jacket" },
+  { id: 5, name: "Coat" },
+  { id: 6, name: "Shorts" },
+  { id: 7, name: "Skirt" },
+  { id: 8, name: "Jeans" },
+  { id: 9, name: "Sandals" },
+  { id: 10, name: "Sneakers" },
+  { id: 11, name: "Boots" },
+  { id: 12, name: "Long-sleeve" },
+  { id: 13, name: "Top" },
+  { id: 14, name: "Overshirt" },
+  { id: 15, name: "Shoes" },
+  { id: 16, name: "Heels" },
+];
+
+
 type ClothingItem = {
   id: number;
-  image_url: string;
-  type_id: number;
-  color_id: number;
-  style_id: number;
+
+  imageUrl: string;
+
+  type: {
+    id: number;
+    name: string;
+  };
+
+  color: {
+    id: number;
+    name: string;
+  };
+
+  style: {
+    id: number;
+    name: string;
+  };
 };
 
 export default function MainMenu({
@@ -24,10 +77,24 @@ export default function MainMenu({
 
   const router = useRouter();
 
+
+  const [filterTypeId, setFilterTypeId] =
+    useState<number | null>(null);
+
+  const [filterColorId, setFilterColorId] =
+    useState<number | null>(null);
+
+  const [filterStyleId, setFilterStyleId] =
+    useState<number | null>(null);
+
   const [selectedItem, setSelectedItem] =
     useState<ClothingItem | null>(
       null
     );
+  
+    const [searchOpen, setSearchOpen] =
+  useState(false);
+
   const [confirmDelete,
   setConfirmDelete] =
     useState(false);
@@ -35,6 +102,20 @@ export default function MainMenu({
   const [isPending,
   startTransition] =
     useTransition();
+
+  const filteredItems =
+  clothingItems.filter(
+    (item) =>
+      (!filterTypeId ||
+        item.type?.id ===
+          filterTypeId) &&
+      (!filterColorId ||
+        item.color?.id ===
+          filterColorId) &&
+      (!filterStyleId ||
+        item.style?.id ===
+          filterStyleId)
+  );  
     
   return (
     <div
@@ -93,24 +174,27 @@ export default function MainMenu({
             }}
           >
           <button
-            onClick={() =>
+            onClick={() => {
+              
               router.push("/addItem")
-            }
+            }}
           >
             Add Item
           </button>
 
             <button
-              onClick={() =>
-                router.push("/searchItem")
-              }
+              onClick={() => {
+                setSelectedItem(null);
+                setSearchOpen(
+                  !searchOpen
+                );
+              }}
             >
-              Search Item
-            </button>
+            Search Item
+          </button>
           </div>
-g
-          {/* GRID + PANEL */}
 
+          {/* GRID + PANEL */}
           <div
             style={{
               display: "flex",
@@ -141,7 +225,7 @@ g
                   gap: "1rem",
                 }}
               >
-                {(clothingItems??[]).map(
+                {(filteredItems ?? []).map(
                   (item) => (
                     <div
                       key={item.id}
@@ -164,7 +248,7 @@ g
                     >
                       <img
                         src={
-                          item.image_url
+                          item.imageUrl
                         }
                         alt="clothing"
                         style={{
@@ -181,6 +265,97 @@ g
             </div>
 
             {/* SIDE PANEL */}
+           {searchOpen && (
+              <div
+                style={{
+                  width: "220px",
+                  backgroundColor: "#FFFDFB",
+                  borderRadius: "24px",
+                  border: "1px solid #B8A391",
+                  padding: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                <h3>Search Filters</h3>
+
+                <label>Type</label>
+                <select
+                  value={filterTypeId ?? ""}
+                  onChange={(e) =>
+                    setFilterTypeId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {TYPES.map((t) => (
+                    <option
+                      key={t.id}
+                      value={t.id}
+                    >
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+
+                <label>Color</label>
+                <select
+                  value={filterColorId ?? ""}
+                  onChange={(e) =>
+                    setFilterColorId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {COLORS.map((c) => (
+                    <option
+                      key={c.id}
+                      value={c.id}
+                    >
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+
+                <label>Style</label>
+                <select
+                  value={filterStyleId ?? ""}
+                  onChange={(e) =>
+                    setFilterStyleId(
+                      e.target.value
+                        ? Number(e.target.value)
+                        : null
+                    )
+                  }
+                >
+                  <option value="">
+                    All
+                  </option>
+
+                  {STYLES.map((s) => (
+                    <option
+                      key={s.id}
+                      value={s.id}
+                    >
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {selectedItem && (
               <div
@@ -199,7 +374,7 @@ g
               >
                 <img
                   src={
-                    selectedItem.image_url
+                    selectedItem.imageUrl
                   }
                   alt="preview"
                   style={{
@@ -216,10 +391,14 @@ g
                       style={{
                         width: "100%",
                       }}
+                      onClick={() =>
+                        router.push(
+                          `/modifyItem/${selectedItem.id}`
+                        )
+                      }
                     >
                       Modify
                     </button>
-
                     <button
                       style={{
                         width: "100%",
@@ -276,6 +455,20 @@ g
                       Delete
                     </button>
 
+                    <button
+                      style={{
+                        marginTop: "1rem",
+                        width: "100%",
+                      }}
+                      onClick={() => {
+                        setFilterTypeId(null);
+                        setFilterColorId(null);
+                        setFilterStyleId(null);
+                      }}
+                    >
+                      Clear Filters
+                    </button>
+                    
                     <button
                       style={{
                         width: "100%",

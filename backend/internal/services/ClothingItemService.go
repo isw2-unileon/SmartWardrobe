@@ -8,6 +8,7 @@ import (
 type ClothingItemRepository interface {
 	GetAll() ([]models.ClothingItem, error)
 	GetClothingItem(models.ClothingItem) ([]models.ClothingItem, error)
+	GetByID(int64) (*models.ClothingItem, error)
 	AddClothingItem(models.ClothingItem) (*models.ClothingItem, error)
 	UpdateClothingItem(int64, models.ClothingItem) (*models.ClothingItem, error)
 	DeleteClothingItem(int64) error
@@ -65,6 +66,16 @@ func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, 
 	}
 
 	return listDto, nil
+}
+
+// Get the clothing item in function of filters
+func (s *ClothingItemService) GetByID(id int64) (dto.ClothingItemDto, error) {
+	model, err := s.repo.GetByID(id)
+	if err != nil {
+		return dto.ClothingItemDto{}, err
+	}
+
+	return mapModelToDto(*model), nil
 }
 
 func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.UserDto) (bool, error) {
