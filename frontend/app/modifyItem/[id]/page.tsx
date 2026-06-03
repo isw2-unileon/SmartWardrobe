@@ -1,4 +1,5 @@
 import ModifyItemForm from "@/components/ModifyItemForm";
+import { getClothingById } from "@/services/getClothingById";
 
 export default async function ModifyItemPage({
   params,
@@ -7,9 +8,14 @@ export default async function ModifyItemPage({
 }) {
   const { id } = await params;
 
+  const item =
+    await getClothingById(
+      Number(id)
+    );
+
   return (
     <ModifyItemForm
-      itemId={Number(id)}
+      item={item}
     />
   );
 }
