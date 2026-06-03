@@ -229,10 +229,14 @@ export default function MainMenu({
                       style={{
                         width: "100%",
                       }}
+                      onClick={() =>
+                        router.push(
+                          `/modifyItem/${selectedItem.id}`
+                        )
+                      }
                     >
                       Modify
                     </button>
-
                     <button
                       style={{
                         width: "100%",
