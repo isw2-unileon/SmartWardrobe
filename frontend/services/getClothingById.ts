@@ -39,10 +39,12 @@ export async function getClothingById(
     );
 
   if (!response.ok) {
-    throw new Error(
-      "Failed to load clothing item"
-    );
-  }
+  const text = await response.text();
+
+  throw new Error(
+    `Status ${response.status}: ${text}`
+  );
+}
 
   return await response.json();
 }

@@ -41,6 +41,10 @@ export default function MainMenu({
     useState<ClothingItem | null>(
       null
     );
+  
+    const [searchOpen, setSearchOpen] =
+  useState(false);
+
   const [confirmDelete,
   setConfirmDelete] =
     useState(false);
@@ -115,16 +119,18 @@ export default function MainMenu({
           </button>
 
             <button
-              onClick={() =>
-                router.push("/searchItem")
-              }
+              onClick={() => {
+                setSelectedItem(null);
+                setSearchOpen(
+                  !searchOpen
+                );
+              }}
             >
-              Search Item
-            </button>
+            Search Item
+          </button>
           </div>
 
           {/* GRID + PANEL */}
-
           <div
             style={{
               display: "flex",

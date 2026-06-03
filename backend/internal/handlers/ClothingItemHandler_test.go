@@ -19,6 +19,7 @@ type MockClothingItemService struct {
 	mock.Mock
 }
 
+// Implement the methods of the ClothingItemService interface
 func (m *MockClothingItemService) GetByID(id int64) (dto.ClothingItemDto, error) {
 	args := m.Called(id)
 
