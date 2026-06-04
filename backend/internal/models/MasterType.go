@@ -8,6 +8,8 @@ type MasterType struct {
 	MaxTemp    float64 `json:"max_temp" gorm:"column:max_temp"`
 	Warmth     int8
 	Layer      *int8
+
+	Category MasterCategory `gorm:"foreignKey:CategoryId"`
 }
 
 func (MasterType) TableName() string {
