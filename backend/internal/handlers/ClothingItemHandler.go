@@ -9,12 +9,11 @@ import (
 )
 
 type ClothingItemService interface {
-	GetAll() ([]dto.ClothingItemDto, error)
+	GetAll(dto.UserDto) ([]dto.ClothingItemDto, error)
 	GetClothingItem(dto.ClothingItemDto, dto.UserDto) ([]dto.ClothingItemDto, error)
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
 	UpdateClothingItem(int64, dto.ClothingItemDto) (dto.ClothingItemDto, error)
 	DeleteClothingItem(int64) error
-	GetByID(int64) (dto.ClothingItemDto, error)
 }
 
 type ClothingItemHandler struct {
@@ -26,7 +25,24 @@ func NewClothingItemHandler(service ClothingItemService) *ClothingItemHandler {
 }
 
 func (h *ClothingItemHandler) GetAll(c *gin.Context) {
-	clothes, err := h.service.GetAll()
+	// Get the user
+	userRaw, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userID, ok := userRaw.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing user"})
+		return
+	}
+
+	user := dto.UserDto{
+		ID: userID,
+	}
+
+	clothes, err := h.service.GetAll(user)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error when getting clothes"})
@@ -177,36 +193,4 @@ func (h *ClothingItemHandler) DeleteClothingItem(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
-}
-
-// Get the clothing item that has the id passed as a parameter
-func (h *ClothingItemHandler) GetByID(c *gin.Context) {
-	idStr := c.Param("id")
-
-	id, err := strconv.ParseInt(
-		idStr,
-		10,
-		64,
-	)
-
-	if err != nil {
-		c.JSON(
-			http.StatusBadRequest,
-			gin.H{"error": "Invalid ID"},
-		)
-		return
-	}
-
-	item, err :=
-		h.service.GetByID(id)
-
-	if err != nil {
-		c.JSON(
-			http.StatusInternalServerError,
-			gin.H{"error": "Error getting clothing item"},
-		)
-		return
-	}
-
-	c.JSON(http.StatusOK, item)
 }

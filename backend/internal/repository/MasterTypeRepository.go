@@ -22,3 +22,11 @@ func (r *MasterTypeRepository) GetAll() ([]models.MasterType, error) {
 
 	return types, err
 }
+
+func (r *MasterTypeRepository) GetTypesByCategory(category models.MasterType) ([]models.MasterType, error) {
+	var types []models.MasterType
+
+	err := r.db.Preload("Category").Where(category).Find(&types).Error
+
+	return types, err
+}

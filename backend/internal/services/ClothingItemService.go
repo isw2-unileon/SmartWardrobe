@@ -6,9 +6,7 @@ import (
 )
 
 type ClothingItemRepository interface {
-	GetAll() ([]models.ClothingItem, error)
-	GetClothingItem(models.ClothingItem) ([]models.ClothingItem, error)
-	GetByID(int64) (*models.ClothingItem, error)
+	GetClothingItemList(models.ClothingItem) ([]models.ClothingItem, error)
 	AddClothingItem(models.ClothingItem) (*models.ClothingItem, error)
 	UpdateClothingItem(int64, models.ClothingItem) (*models.ClothingItem, error)
 	DeleteClothingItem(int64) error
@@ -23,8 +21,11 @@ func NewClothingItemService(repo ClothingItemRepository) *ClothingItemService {
 }
 
 // GetAll return all the clothes of the user
-func (s *ClothingItemService) GetAll() ([]dto.ClothingItemDto, error) {
-	clothes, err := s.repo.GetAll()
+func (s *ClothingItemService) GetAll(user dto.UserDto) ([]dto.ClothingItemDto, error) {
+	filter := models.ClothingItem{
+		UserId: user.ID,
+	}
+	clothes, err := s.repo.GetClothingItemList(filter)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +55,7 @@ func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, 
 		model.StyleId = &clothingItem.Style.ID
 	}
 
-	list, err := s.repo.GetClothingItem(model)
+	list, err := s.repo.GetClothingItemList(model)
 	if err != nil {
 		return nil, err
 	}
@@ -66,16 +67,6 @@ func (s *ClothingItemService) GetClothingItem(clothingItem dto.ClothingItemDto, 
 	}
 
 	return listDto, nil
-}
-
-// Get the clothing item in function of filters
-func (s *ClothingItemService) GetByID(id int64) (dto.ClothingItemDto, error) {
-	model, err := s.repo.GetByID(id)
-	if err != nil {
-		return dto.ClothingItemDto{}, err
-	}
-
-	return mapModelToDto(*model), nil
 }
 
 func (s *ClothingItemService) AddClothingItem(dto dto.ClothingItemDto, user dto.UserDto) (bool, error) {

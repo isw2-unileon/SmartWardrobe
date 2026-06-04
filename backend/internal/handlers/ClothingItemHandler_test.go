@@ -19,20 +19,8 @@ type MockClothingItemService struct {
 	mock.Mock
 }
 
-// Implement the methods of the ClothingItemService interface
-func (m *MockClothingItemService) GetByID(id int64) (dto.ClothingItemDto, error) {
-	args := m.Called(id)
-
-	var item dto.ClothingItemDto
-	if args.Get(0) != nil {
-		item = args.Get(0).(dto.ClothingItemDto)
-	}
-
-	return item, args.Error(1)
-}
-
-func (m *MockClothingItemService) GetAll() ([]dto.ClothingItemDto, error) {
-	args := m.Called()
+func (m *MockClothingItemService) GetAll(user dto.UserDto) ([]dto.ClothingItemDto, error) {
+	args := m.Called(user)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -70,9 +58,13 @@ func TestClothingItemHandler_GetAll_Success(t *testing.T) {
 	fakeClothes := []dto.ClothingItemDto{
 		{ID: 1, ImageUrl: "url1"},
 	}
-	mockService.On("GetAll").Return(fakeClothes, nil)
+	expectedUser := dto.UserDto{ID: "user-123"}
+	mockService.On("GetAll", expectedUser).Return(fakeClothes, nil)
 
 	r := gin.New()
+	r.Use(func(c *gin.Context) {
+		c.Set("userID", "user-123")
+	})
 	r.GET("/clothes", handler.GetAll)
 
 	req, _ := http.NewRequest(http.MethodGet, "/clothes", nil)
@@ -88,6 +80,23 @@ func TestClothingItemHandler_GetAll_Success(t *testing.T) {
 	assert.Equal(t, int64(1), response[0].ID)
 
 	mockService.AssertExpectations(t)
+}
+
+func TestClothingItemHandler_GetAll_Unauthorized(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockService := new(MockClothingItemService)
+	handler := handlers.NewClothingItemHandler(mockService)
+
+	r := gin.New()
+
+	r.GET("/clothes", handler.GetAll)
+
+	req, _ := http.NewRequest(http.MethodGet, "/clothes", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	assert.Contains(t, w.Body.String(), "Unauthorized")
 }
 
 func TestClothingItemHandler_GetClothingItem_Success(t *testing.T) {

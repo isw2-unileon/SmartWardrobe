@@ -23,6 +23,13 @@ func (m *MockTypeRepository) GetAll() ([]models.MasterType, error) {
 	return args.Get(0).([]models.MasterType), args.Error(1)
 }
 
+func (m *MockTypeRepository) GetTypesByCategory(models.MasterType) ([]models.MasterType, error) {
+	// m.Called() records that this function was called
+	args := m.Called()
+
+	return args.Get(0).([]models.MasterType), args.Error(1)
+}
+
 func TestMasterTypeService_GetAll_Success(t *testing.T) {
 	// The fake repository is initialized
 	mockRepo := new(MockTypeRepository)

@@ -16,24 +16,7 @@ type MockClothingItemRepository struct {
 	mock.Mock
 }
 
-func (m *MockClothingItemRepository) GetByID(id int64) (*models.ClothingItem, error) {
-	args := m.Called(id)
-
-	var item *models.ClothingItem
-
-	if args.Get(0) != nil {
-		item = args.Get(0).(*models.ClothingItem)
-	}
-
-	return item, args.Error(1)
-}
-
-func (m *MockClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
-	args := m.Called()
-	return args.Get(0).([]models.ClothingItem), args.Error(1)
-}
-
-func (m *MockClothingItemRepository) GetClothingItem(item models.ClothingItem) ([]models.ClothingItem, error) {
+func (m *MockClothingItemRepository) GetClothingItemList(item models.ClothingItem) ([]models.ClothingItem, error) {
 	args := m.Called(item)
 	return args.Get(0).([]models.ClothingItem), args.Error(1)
 }
@@ -72,11 +55,11 @@ func TestClothingItemService_GetAll_Success(t *testing.T) {
 		},
 	}
 
-	mockRepo.On("GetAll").Return(fakeData, nil)
+	mockRepo.On("GetClothingItemList", mock.Anything).Return(fakeData, nil)
 
 	service := services.NewClothingItemService(mockRepo)
 
-	result, err := service.GetAll()
+	result, err := service.GetAll(dto.UserDto{ID: "1"})
 
 	assert.NoError(t, err)
 	assert.Len(t, result, 1)
@@ -93,11 +76,11 @@ func TestClothingItemService_GetAll_Error(t *testing.T) {
 	expectedError := errors.New("database error")
 	var nilModels []models.ClothingItem
 
-	mockRepo.On("GetAll").Return(nilModels, expectedError)
+	mockRepo.On("GetClothingItemList", mock.Anything).Return(nilModels, expectedError)
 
 	service := services.NewClothingItemService(mockRepo)
 
-	result, err := service.GetAll()
+	result, err := service.GetAll(dto.UserDto{ID: "1"})
 
 	assert.Error(t, err)
 	assert.Equal(t, expectedError, err)
@@ -176,7 +159,7 @@ func TestClothingItemService_GetClothingItem_Success(t *testing.T) {
 		},
 	}
 
-	mockRepo.On("GetClothingItem", mock.Anything).Return(fakeData, nil)
+	mockRepo.On("GetClothingItemList", mock.Anything).Return(fakeData, nil)
 
 	service := services.NewClothingItemService(mockRepo)
 	result, err := service.GetClothingItem(inputDto, inputUser)
@@ -197,7 +180,7 @@ func TestClothingItemService_GetClothingItem_Error(t *testing.T) {
 	expectedError := errors.New("error fetching data")
 
 	var nilModels []models.ClothingItem
-	mockRepo.On("GetClothingItem", mock.Anything).Return(nilModels, expectedError)
+	mockRepo.On("GetClothingItemList", mock.Anything).Return(nilModels, expectedError)
 
 	service := services.NewClothingItemService(mockRepo)
 	result, err := service.GetClothingItem(inputDto, inputUser)
