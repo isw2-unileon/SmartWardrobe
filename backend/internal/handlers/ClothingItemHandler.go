@@ -9,7 +9,7 @@ import (
 )
 
 type ClothingItemService interface {
-	GetAll() ([]dto.ClothingItemDto, error)
+	GetAll(dto.UserDto) ([]dto.ClothingItemDto, error)
 	GetClothingItem(dto.ClothingItemDto, dto.UserDto) ([]dto.ClothingItemDto, error)
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
 	UpdateClothingItem(int64, dto.ClothingItemDto) (dto.ClothingItemDto, error)
@@ -25,7 +25,24 @@ func NewClothingItemHandler(service ClothingItemService) *ClothingItemHandler {
 }
 
 func (h *ClothingItemHandler) GetAll(c *gin.Context) {
-	clothes, err := h.service.GetAll()
+	// Get the user
+	userRaw, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userID, ok := userRaw.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error parsing user"})
+		return
+	}
+
+	user := dto.UserDto{
+		ID: userID,
+	}
+
+	clothes, err := h.service.GetAll(user)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error when getting clothes"})

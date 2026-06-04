@@ -15,19 +15,7 @@ func NewClothingItemRepository(db *gorm.DB) *ClothingItemRepository {
 	return &ClothingItemRepository{db: db}
 }
 
-func (r *ClothingItemRepository) GetAll() ([]models.ClothingItem, error) {
-	var clothes []models.ClothingItem
-
-	err := r.db.
-		Preload("Type").
-		Preload("Color").
-		Preload("Style").
-		Find(&clothes).Error
-
-	return clothes, err
-}
-
-func (r *ClothingItemRepository) GetClothingItem(filters models.ClothingItem) ([]models.ClothingItem, error) {
+func (r *ClothingItemRepository) GetClothingItemList(filters models.ClothingItem) ([]models.ClothingItem, error) {
 	var list []models.ClothingItem
 
 	err := r.db.
