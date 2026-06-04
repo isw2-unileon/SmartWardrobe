@@ -14,6 +14,7 @@ type ClothingItemService interface {
 	AddClothingItem(dto.ClothingItemDto, dto.UserDto) (bool, error)
 	UpdateClothingItem(int64, dto.ClothingItemDto) (dto.ClothingItemDto, error)
 	DeleteClothingItem(int64) error
+	GetByID(int64) (dto.ClothingItemDto, error)
 }
 
 type ClothingItemHandler struct {
@@ -193,4 +194,36 @@ func (h *ClothingItemHandler) DeleteClothingItem(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+// Get the clothing item that has the id passed as a parameter
+func (h *ClothingItemHandler) GetByID(c *gin.Context) {
+	idStr := c.Param("id")
+
+	id, err := strconv.ParseInt(
+		idStr,
+		10,
+		64,
+	)
+
+	if err != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			gin.H{"error": "Invalid ID"},
+		)
+		return
+	}
+
+	item, err :=
+		h.service.GetByID(id)
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			gin.H{"error": "Error getting clothing item"},
+		)
+		return
+	}
+
+	c.JSON(http.StatusOK, item)
 }
