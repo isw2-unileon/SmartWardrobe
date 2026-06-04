@@ -6,8 +6,9 @@ import (
 )
 
 type ClothingItemRepository interface {
-	GetClothingItemList(models.ClothingItem) ([]models.ClothingItem, error)
 	AddClothingItem(models.ClothingItem) (*models.ClothingItem, error)
+	GetByID(int64) (*models.ClothingItem, error)
+	GetClothingItemList(models.ClothingItem) ([]models.ClothingItem, error)
 	UpdateClothingItem(int64, models.ClothingItem) (*models.ClothingItem, error)
 	DeleteClothingItem(int64) error
 }

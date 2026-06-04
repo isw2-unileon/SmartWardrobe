@@ -19,6 +19,18 @@ type MockClothingItemService struct {
 	mock.Mock
 }
 
+// Implement the methods of the ClothingItemService interface
+func (m *MockClothingItemService) GetByID(id int64) (dto.ClothingItemDto, error) {
+	args := m.Called(id)
+
+	var item dto.ClothingItemDto
+	if args.Get(0) != nil {
+		item = args.Get(0).(dto.ClothingItemDto)
+	}
+
+	return item, args.Error(1)
+}
+
 func (m *MockClothingItemService) GetAll(user dto.UserDto) ([]dto.ClothingItemDto, error) {
 	args := m.Called(user)
 	if args.Get(0) == nil {
