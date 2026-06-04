@@ -25,8 +25,9 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	masterStyleService := services.NewMasterStyleService(masterStyleRepo)
 	masterCategoryService := services.NewMasterCategoriesService(masterCategoryRepository)
 	clothingItemService := services.NewClothingItemService(clothingItemRepo)
+	locationService := services.NewLocationService()
 	weatherService := services.NewWeatherService()
-	outfitService := services.NewOutfitService(weatherService, clothingItemService, masterCategoryService, masterTypeService)
+	outfitService := services.NewOutfitService(locationService, weatherService, clothingItemService, masterCategoryService, masterTypeService)
 
 	// C. Instantiate the Handler and inject the Service
 	masterColorHandler := handlers.NewMasterColorHandler(masterColorService)

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type WeatherService struct{}
@@ -13,42 +14,45 @@ func NewWeatherService() *WeatherService {
 	return &WeatherService{}
 }
 
-func (s *WeatherService) GetWeather(city string) (*dto.WeatherDto, error) {
-	url := fmt.Sprintf("https://wttr.in/%s?format=j1&lang=es", city)
+func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, endDate string) (*dto.WeatherDto, error) {
+	baseURL := "https://api.open-meteo.com/v1/forecast"
 
-	resp, err := http.Get(url)
+	// The url is build param for param
+	params := url.Values{}
+	params.Add("latitude", fmt.Sprintf("%.4f", city.Results[0].Latitude))
+	params.Add("longitude", fmt.Sprintf("%.4f", city.Results[0].Longitude))
+	params.Add("daily", "temperature_2m_max,temperature_2m_min")
+	params.Add("timezone", "auto")
+	params.Add("start_date", startDate)
+	params.Add("end_date", endDate)
+
+	apiURL := fmt.Sprintf("%s?%s", baseURL, params.Encode())
+
+	resp, err := http.Get(apiURL)
 	if err != nil {
-		return nil, fmt.Errorf("error calling wttr.in: %w", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("wttr.in returned status: %d", resp.StatusCode)
+		return nil, fmt.Errorf("API error: %d", resp.StatusCode)
 	}
 
-	var raw struct {
-		Weather []struct {
-			MinTempC string `json:"mintempC"`
-			MaxTempC string `json:"maxtempC"`
-		} `json:"weather"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
+	var weather dto.WeatherDto
+	if err := json.NewDecoder(resp.Body).Decode(&weather); err != nil {
 		return nil, err
 	}
 
-	if len(raw.Weather) == 0 {
-		return nil, fmt.Errorf("no weather data for city: %s", city)
+	if len(weather.Daily.Time) > 0 {
+		date := weather.Daily.Time[0]
+		max := weather.Daily.MaxTemp[0]
+		min := weather.Daily.MinTemp[0]
+
+		fmt.Printf("The weather for the day %s is: Max %.1f°C / Min %.1f°C\n", date, max, min)
+	} else {
+		fmt.Println("No data were found for that date.")
 	}
 
-	// Pass the string to float64
-	var minTemp, maxTemp float64
-	fmt.Sscanf(raw.Weather[0].MinTempC, "%f", &minTemp)
-	fmt.Sscanf(raw.Weather[0].MaxTempC, "%f", &maxTemp)
+	return &weather, nil
 
-	return &dto.WeatherDto{
-		MinTemp: minTemp,
-		MaxTemp: maxTemp,
-		City:    city,
-	}, nil
 }

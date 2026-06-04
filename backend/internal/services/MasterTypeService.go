@@ -48,7 +48,11 @@ func (s *MasterTypeService) GetTypesWithTempRangeAndCategory(weather *dto.Weathe
 	// Convert the Model to DTO if apply the conditions
 	var typeDtos []dto.MasterTypeDto
 	for _, c := range types {
-		if c.MaxTemp < weather.MaxTemp && c.MinTemp > weather.MinTemp {
+		if (c.MinTemp == nil && c.MaxTemp == nil) ||
+			(c.MaxTemp != nil && (*c.MaxTemp) > weather.Daily.MaxTemp[0]) &&
+				(c.MinTemp != nil && (*c.MinTemp) < weather.Daily.MinTemp[0]) ||
+			(c.MinTemp == nil && c.MaxTemp != nil && (*c.MaxTemp) > weather.Daily.MaxTemp[0]) ||
+			(c.MaxTemp == nil && c.MinTemp != nil && (*c.MinTemp) < weather.Daily.MinTemp[0]) {
 			typeDtos = append(typeDtos, dto.MasterTypeDto{
 				ID:   c.ID,
 				Name: c.Name,

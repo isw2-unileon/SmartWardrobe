@@ -7,8 +7,11 @@ import (
 )
 
 // Interfaces de los servicios que necesita
+type LocationServiceInterface interface {
+	GetLocation(city string) (*dto.LocationDto, error)
+}
 type WeatherServiceInterface interface {
-	GetWeather(city string) (*dto.WeatherDto, error)
+	GetWeather(location *dto.LocationDto, startDate string, endDate string) (*dto.WeatherDto, error)
 }
 
 type ClothingServiceInterface interface {
@@ -24,14 +27,16 @@ type MasterTypeServiceInterface interface {
 }
 
 type OutfitService struct {
+	locationService         LocationServiceInterface
 	weatherService          WeatherServiceInterface
 	clothingService         ClothingServiceInterface
 	masterCategoriesService MasterCategoriesServiceInterface
 	masterTypeService       MasterTypeServiceInterface
 }
 
-func NewOutfitService(weatherService WeatherServiceInterface, clothingService ClothingServiceInterface, categoryService MasterCategoriesServiceInterface, typeService MasterTypeServiceInterface) *OutfitService {
+func NewOutfitService(locationService LocationServiceInterface, weatherService WeatherServiceInterface, clothingService ClothingServiceInterface, categoryService MasterCategoriesServiceInterface, typeService MasterTypeServiceInterface) *OutfitService {
 	return &OutfitService{
+		locationService:         locationService,
 		weatherService:          weatherService,
 		clothingService:         clothingService,
 		masterCategoriesService: categoryService,
@@ -40,8 +45,16 @@ func NewOutfitService(weatherService WeatherServiceInterface, clothingService Cl
 }
 
 func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDto) (*dto.OutfitResponseDto, error) {
+	// Call the service to obtain the latitude and longitude of the city
+	location, err := s.locationService.GetLocation(req.City)
+	if err != nil {
+		fmt.Printf("error getting location: %v\n", err)
+		return nil, err
+	}
+	fmt.Printf("location: %v\n", location)
+
 	// Call the WeatherService
-	weather, err := s.weatherService.GetWeather(req.City)
+	weather, err := s.weatherService.GetWeather(location, req.StartDate, req.EndDate)
 	if err != nil {
 		fmt.Printf("error getting weather: %v\n", err)
 		return nil, err

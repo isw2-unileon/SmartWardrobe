@@ -1,6 +1,7 @@
 package dto
 
 type OutfitRequestDto struct {
-	City string `json:"city" binding:"required"`
-	Days int64  `json:"days" binding:"required"`
+	City      string `json:"city" binding:"required"`
+	StartDate string `json:"start_date" binding:"required"`
+	EndDate   string `json:"end_date" binding:"required"`
 }
