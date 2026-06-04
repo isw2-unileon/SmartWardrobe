@@ -57,11 +57,3 @@ export async function signUp(_prevState: AuthState, formData: FormData) {
 
   redirect("/mainMenu");
 }
-export async function signOut() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-
-  await supabase.auth.signOut();
-
-  redirect("/");
-}

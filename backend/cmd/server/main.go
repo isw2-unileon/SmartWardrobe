@@ -1,11 +1,8 @@
 package main
 
 import (
-	//	"backend/internal/ai/clip"
 	"backend/internal/config"
 	"backend/internal/routes"
-	//	"backend/internal/services"
-
 	"backend/middleware"
 	"log"
 	"os"
@@ -35,28 +32,18 @@ func main() {
 		}()
 	}
 
-	// // Initialize the CLIP classifier
-	// classifier, err := clip.NewCLIPClassifier("./models")
-	// if err != nil {
-	// 	log.Fatalf("Could not initialize CLIP: %v", err)
-	// }
-	// defer classifier.Close()
-
-	// clipSvc := services.NewClipService(classifier)
-
 	r := gin.Default()
 
 	// CORS configuration: Vital for connecting the local Frontend
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{os.Getenv("NEXT_URL")} //the frontend port
-	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{os.Getenv("NEXT_URL")} //the frontend port
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
 	// All calls to the back go through the middleware
-	r.Use(cors.New(corsConfig))
+	r.Use(cors.New(config))
 	r.Use(middleware.AuthMiddleware)
 
-	//	routes.SetupRoutes(r, db, clipSvc)
 	routes.SetupRoutes(r, db)
 
 	// The backend will run on port 8080

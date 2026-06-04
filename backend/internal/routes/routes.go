@@ -10,7 +10,6 @@ import (
 )
 
 // SetupRoutes set up all endpoints
-// func SetupRoutes(r *gin.Engine, db *gorm.DB, clipSvc *services.ClipService) {
 func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	// A. Instantiate the Repository
@@ -34,7 +33,6 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	masterColorHandler := handlers.NewMasterColorHandler(masterColorService)
 	masterTypeHandler := handlers.NewMasterTypeHandler(masterTypeService)
 	masterStyleHandler := handlers.NewMasterStyleHandler(masterStyleService)
-	//clipHandler := handlers.NewClipHandler(clipSvc)
 	clothingItemsHandler := handlers.NewClothingItemHandler(clothingItemService)
 	outfitHandler := handlers.NewOutfitHandler(outfitService)
 
@@ -47,16 +45,11 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 		api.GET("/getAllStyles", masterStyleHandler.GetAll)
 
-		// CLIP
-		//api.POST("/clothing/analyze", clipHandler.Analyze)
-
 		api.GET("/clothingItems", clothingItemsHandler.GetAll)
 
 		api.GET("/clothingItem/filters", clothingItemsHandler.GetClothingItem)
 
 		api.POST("/clothingItem", clothingItemsHandler.AddClothingItem)
-
-		api.GET("/clothingItem/:id", clothingItemsHandler.GetByID)
 
 		api.PUT("/clothingItem/:id", clothingItemsHandler.UpdateClothingItem)
 

@@ -63,22 +63,4 @@ func (r *ClothingItemRepository) UpdateClothingItem(id int64, model models.Cloth
 func (r *ClothingItemRepository) DeleteClothingItem(id int64) error {
 	err := r.db.Delete(&models.ClothingItem{}, id).Error
 	return err
-
-}
-
-// Get the clothing item according to the id
-func (r *ClothingItemRepository) GetByID(id int64) (*models.ClothingItem, error) {
-	var item models.ClothingItem
-
-	err := r.db.
-		Preload("Type").
-		Preload("Color").
-		Preload("Style").
-		First(&item, id).Error
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &item, nil
 }
