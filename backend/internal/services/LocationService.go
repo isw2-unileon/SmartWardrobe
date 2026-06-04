@@ -23,10 +23,14 @@ func (s *LocationService) GetLocation(city string) (*dto.LocationDto, error) {
 		fmt.Printf("error search the city: %v\n", err)
 		return nil, err
 	}
-	defer respGeo.Body.Close()
+	defer func() {
+		_ = respGeo.Body.Close()
+	}()
 
 	var location dto.LocationDto
-	json.NewDecoder(respGeo.Body).Decode(&location)
+	if err := json.NewDecoder(respGeo.Body).Decode(&location); err != nil {
+		return nil, err
+	}
 
 	if len(location.Results) == 0 {
 		fmt.Printf("not found the city: %s\n", city)

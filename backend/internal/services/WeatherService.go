@@ -32,7 +32,9 @@ func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, end
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("API error: %d", resp.StatusCode)

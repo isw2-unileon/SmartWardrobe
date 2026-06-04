@@ -64,17 +64,17 @@ func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDt
 	// Generate the parts of the outfit
 	upperwear := s.generateOutfitPart(weather, "upperwear", user)
 	if upperwear == nil {
-		return nil, fmt.Errorf("error search the upperwear part.")
+		return nil, fmt.Errorf("error searching the upperwear part")
 	}
 
 	bottomwear := s.generateOutfitPart(weather, "bottomwear", user)
 	if bottomwear == nil {
-		return nil, fmt.Errorf("error search the bottomwear part.")
+		return nil, fmt.Errorf("error searching the bottomwear part")
 	}
 
 	footwear := s.generateOutfitPart(weather, "footwear", user)
 	if footwear == nil {
-		return nil, fmt.Errorf("error search the footwear part.")
+		return nil, fmt.Errorf("error searching the footwear part")
 	}
 
 	outerwear := s.generateOutfitPart(weather, "outerwear", user)
