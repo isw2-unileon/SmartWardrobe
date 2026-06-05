@@ -52,8 +52,29 @@ export default function OutfitResult() {
   if (!data) {
     return <p>Loading...</p>;
   }
+///TEMP
+  if (data.mode === "week") {
+  return (
+    <div className="page-container">
+      <div className="card">
+        <h2>
+          Weekly Outfits
+        </h2>
 
-  const outfit = data.result.outfit;
+        <p>
+          Generated:
+          {" "}
+          {data.outfits.length}
+          {" "}
+          outfits
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const outfit =
+  data.result.outfit;
 
   return (
     <div className="page-container">
