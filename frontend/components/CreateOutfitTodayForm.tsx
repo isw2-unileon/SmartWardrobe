@@ -2,39 +2,43 @@
 
 import { useState } from "react";
 import { generateOutfit } from "@/services/generateOutfit";
+import { useRouter } from "next/navigation";
+
 
 export default function CreateOutfitTodayForm() {
   const [city, setCity] =
     useState("");
 
-const handleGenerate =
-  async () => {
+    const router = useRouter();
+    
+    const handleGenerate = async () => {
     const today =
-      new Date()
-        .toISOString()
-        .split("T")[0];
-
-    const handleGenerate =
-  async () => {
-    const today =
-      new Date()
+        new Date()
         .toISOString()
         .split("T")[0];
 
     const result =
-      await generateOutfit({
+        await generateOutfit({
         city,
         startDate: today,
         endDate: today,
-      });
+        });
 
-    console.log(
-      "RESULT:",
-      result
+    localStorage.setItem(
+        "generatedOutfit",
+        JSON.stringify({
+        mode: "today",
+        city,
+        startDate: today,
+        endDate: today,
+        result,
+        })
     );
-  };
-  };
 
+    router.push(
+        "/createOutfit/result"
+    );
+    };
   return (
     <div className="page-container">
       <div
@@ -87,6 +91,7 @@ const handleGenerate =
         </div>
       </div>
     </div>
+    
     
   );
 }
