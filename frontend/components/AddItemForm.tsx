@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { uploadImage } from "@/services/storage";
 import { removeBackground } from "@/services/removeBackground";
-import { analyzeClothing } from "@/services/clip";
+//import { analyzeClothing } from "@/services/clip";
 import { useRouter } from "next/navigation";
 
 export default function AddItemForm() {
@@ -32,30 +32,6 @@ const handleFile = async (
 
       const processedFile =
         await removeBackground(selected);
-
-      // Removing background effect 
-      //---------------------------------------------
-      // const elapsed =
-      //   Date.now() - start;
-
-      // const MIN_LOADING_TIME =
-      //   1000;
-
-      // if (
-      //   elapsed <
-      //   MIN_LOADING_TIME
-      // ) {
-
-      //   await new Promise(
-      //     resolve =>
-      //       setTimeout(
-      //         resolve,
-      //         MIN_LOADING_TIME -
-      //           elapsed,
-      //       ),
-      //   );
-      // }
-      //---------------------------------------------
 
       setFile(processedFile);
 
@@ -91,18 +67,18 @@ const handleFile = async (
 
     const imageUrl = await uploadImage(formData);
 
-    const prediction = await analyzeClothing(file);
-    console.log(prediction);
+    //const prediction = await analyzeClothing(file);
 
     setLoading(false);
 
-    router.push(
-      `/addItem/Verify?` +
-      `imageUrl=${encodeURIComponent(imageUrl)}` +
-      `&color=${encodeURIComponent(prediction.color)}` +
-      `&style=${encodeURIComponent(prediction.style)}` +
-      `&type=${encodeURIComponent(prediction.type)}`
-    );
+    // router.push(
+    //   `/addItem/Verify?` +
+    //   `imageUrl=${encodeURIComponent(imageUrl)}` +
+    //   `&color=${encodeURIComponent(prediction.color)}` +
+    //   `&style=${encodeURIComponent(prediction.style)}` +
+    //   `&type=${encodeURIComponent(prediction.type)}`
+    // );
+    router.push(`/addItem/Verify?imageUrl=${encodeURIComponent(imageUrl)}`);
   };
 
   return (

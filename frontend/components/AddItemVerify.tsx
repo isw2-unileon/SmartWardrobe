@@ -57,23 +57,17 @@ export default function AddItemVerify({
   const router = useRouter();
 
   const initialColorId = COLORS.find(c => c.name.toLowerCase() === predictedColor.toLowerCase())?.id || 1;
-
   const initialStyleId = STYLES.find(s => s.name.toLowerCase() === predictedStyle.toLowerCase())?.id || 1;
-
   const initialTypeId = TYPES.find(t => t.name.toLowerCase() === predictedType.toLowerCase())?.id || 1;
 
   const [colorId, setColorId] = useState(initialColorId);
-
   const [styleId, setStyleId] = useState(initialStyleId);
-
   const [typeId, setTypeId] = useState(initialTypeId);
-
+  
   const [loading, setLoading] = useState(false);
 
   const typeName = TYPES.find((t) => t.id === typeId)?.name || "";
-
   const colorName = COLORS.find((c) => c.id === colorId)?.name || "";
-
   const styleName = STYLES.find((s) => s.id === styleId)?.name || "";
 
   const handleSave = async () => {
