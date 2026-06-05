@@ -2,21 +2,83 @@
 
 import { useState } from "react";
 import { uploadImage } from "@/services/storage";
+import { removeBackground } from "@/services/removeBackground";
+import { analyzeClothing } from "@/services/clip";
 import { useRouter } from "next/navigation";
 
 export default function AddItemForm() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [removingBg, setRemovingBg] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
+const handleFile = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+
+    const selected =
+      e.target.files?.[0];
 
     if (!selected) return;
 
-    setFile(selected);
-    setPreview(URL.createObjectURL(selected));
+    setFile(selected);preview
+
+    setRemovingBg(true);
+
+    const start = Date.now();
+
+    try {
+
+      const processedFile =
+        await removeBackground(selected);
+
+      // Removing background effect 
+      //---------------------------------------------
+      // const elapsed =
+      //   Date.now() - start;
+
+      // const MIN_LOADING_TIME =
+      //   1000;
+
+      // if (
+      //   elapsed <
+      //   MIN_LOADING_TIME
+      // ) {
+
+      //   await new Promise(
+      //     resolve =>
+      //       setTimeout(
+      //         resolve,
+      //         MIN_LOADING_TIME -
+      //           elapsed,
+      //       ),
+      //   );
+      // }
+      //---------------------------------------------
+
+      setFile(processedFile);
+
+      setPreview(
+        URL.createObjectURL(
+          processedFile,
+        ),
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      setPreview(
+        URL.createObjectURL(
+          selected,
+        ),
+      );
+
+    } finally {
+
+      setRemovingBg(false);
+    }
   };
 
   const handleUpload = async () => {
@@ -29,9 +91,18 @@ export default function AddItemForm() {
 
     const imageUrl = await uploadImage(formData);
 
+    const prediction = await analyzeClothing(file);
+    console.log(prediction);
+
     setLoading(false);
 
-    router.push(`/addItem/verify?imageUrl=${encodeURIComponent(imageUrl)}`);
+    router.push(
+      `/addItem/Verify?` +
+      `imageUrl=${encodeURIComponent(imageUrl)}` +
+      `&color=${encodeURIComponent(prediction.color)}` +
+      `&style=${encodeURIComponent(prediction.style)}` +
+      `&type=${encodeURIComponent(prediction.type)}`
+    );
   };
 
   return (
@@ -105,6 +176,18 @@ export default function AddItemForm() {
             {file ? file.name : "No image selected"}
           </p>
 
+          {removingBg && (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "2rem",
+              }}
+            >
+              <div>
+                Removing background...
+              </div>
+            </div>
+          )}
           {preview && (
             <div
               style={{
