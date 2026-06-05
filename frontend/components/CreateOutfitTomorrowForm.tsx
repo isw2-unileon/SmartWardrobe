@@ -62,7 +62,7 @@ export default function CreateOutfitTomorrowForm() {
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Leon"
+            placeholder="León"
           />
 
           <>

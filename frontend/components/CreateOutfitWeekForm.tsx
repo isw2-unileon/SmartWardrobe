@@ -86,10 +86,7 @@ export default function CreateOutfitWeekForm() {
           <>
             <label>Country</label>
             <input type="text" placeholder="Spain" />
-          </>  <>
-            <label>Country</label>
-            <input type="text" placeholder="Spain" />
-          </>
+          </> 
 
           <label>Start Date</label>
 
