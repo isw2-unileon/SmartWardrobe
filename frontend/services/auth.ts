@@ -31,10 +31,10 @@ export async function login(_prevState: AuthState, formData: FormData) {
   if (error) {
     // If the password is incorrect or user don't exist, it redirects with an error parameter
     return { error: "Invalid email or password" };
+  }else{
+    // If everything is correct, the session is saved in cookies and redirected to the main page
+    redirect("/mainMenu");
   }
-
-  // If everything is correct, the session is saved in cookies and redirected to the main page
-  redirect("/mainMenu");
 }
 
 export async function signUp(_prevState: AuthState, formData: FormData) {

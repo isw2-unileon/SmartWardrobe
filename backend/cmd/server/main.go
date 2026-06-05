@@ -1,10 +1,11 @@
 package main
 
 import (
-	//	"backend/internal/ai/clip"
+	//"backend/internal/ai/clip"
 	"backend/internal/config"
 	"backend/internal/routes"
-	//	"backend/internal/services"
+
+	//"backend/internal/services"
 
 	"backend/middleware"
 	"log"
@@ -41,7 +42,6 @@ func main() {
 	// 	log.Fatalf("Could not initialize CLIP: %v", err)
 	// }
 	// defer classifier.Close()
-
 	// clipSvc := services.NewClipService(classifier)
 
 	r := gin.Default()
@@ -56,7 +56,7 @@ func main() {
 	r.Use(cors.New(corsConfig))
 	r.Use(middleware.AuthMiddleware)
 
-	//	routes.SetupRoutes(r, db, clipSvc)
+	//routes.SetupRoutes(r, db, clipSvc)
 	routes.SetupRoutes(r, db)
 
 	// The backend will run on port 8080
