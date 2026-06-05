@@ -43,13 +43,30 @@ const TYPES = [
   { id: 16, name: "Heels" },
 ];
 
-export default function AddItemVerify({ imageUrl }: { imageUrl: string }) {
+export default function AddItemVerify({
+  imageUrl,
+  predictedColor,
+  predictedStyle,
+  predictedType,
+}: {
+  imageUrl: string;
+  predictedColor: string;
+  predictedStyle: string;
+  predictedType: string;
+}) {
   const router = useRouter();
 
-  const [colorId, setColorId] = useState(1);
-  const [styleId, setStyleId] = useState(1);
+  const initialColorId = COLORS.find(c => c.name.toLowerCase() === predictedColor.toLowerCase())?.id || 1;
 
-  const [typeId, setTypeId] = useState(1);
+  const initialStyleId = STYLES.find(s => s.name.toLowerCase() === predictedStyle.toLowerCase())?.id || 1;
+
+  const initialTypeId = TYPES.find(t => t.name.toLowerCase() === predictedType.toLowerCase())?.id || 1;
+
+  const [colorId, setColorId] = useState(initialColorId);
+
+  const [styleId, setStyleId] = useState(initialStyleId);
+
+  const [typeId, setTypeId] = useState(initialTypeId);
 
   const [loading, setLoading] = useState(false);
 

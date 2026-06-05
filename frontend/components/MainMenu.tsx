@@ -87,7 +87,7 @@ export default function MainMenu({
 
   const [isPending, startTransition] = useTransition();
 
-  const filteredItems = clothingItems.filter(
+  const filteredItems = (clothingItems ?? []).filter(
     (item) =>
       (!filterTypeId || item.type?.id === filterTypeId) &&
       (!filterColorId || item.color?.id === filterColorId) &&
