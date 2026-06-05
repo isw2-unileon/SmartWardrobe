@@ -1,39 +1,59 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 
+import { generateOutfit } from "@/services/generateOutfit";
+
 export default function OutfitResult() {
-  const [data, setData] =
-    useState<any>(null);
+  const [data, setData] = useState<any>(null);
 
-  const router =
-    useRouter();
+  const router = useRouter();
 
-  useEffect(() => {
-    const stored =
-      localStorage.getItem(
-        "generatedOutfit"
-      );
+  const handleRetry = async () => {
+    const stored = localStorage.getItem("generatedOutfit");
 
     if (!stored) {
-      router.push(
-        "/mainMenu"
-      );
       return;
     }
 
-    setData(
-      JSON.parse(stored)
-    );
+    const parsed = JSON.parse(stored);
+
+    const result = await generateOutfit({
+      city: parsed.city,
+
+      startDate: parsed.startDate,
+
+      endDate: parsed.endDate,
+    });
+
+    const newData = {
+      ...parsed,
+      result,
+    };
+
+    localStorage.setItem("generatedOutfit", JSON.stringify(newData));
+
+    setData(newData);
+  };
+
+  useEffect(() => {
+    const stored = localStorage.getItem("generatedOutfit");
+
+    if (!stored) {
+      router.push("/mainMenu");
+      return;
+    }
+
+    setData(JSON.parse(stored));
   }, [router]);
 
   if (!data) {
     return <p>Loading...</p>;
   }
 
-  const outfit =
-    data.result.outfit;
+  const outfit = data.result.outfit;
 
   return (
     <div className="page-container">
@@ -44,9 +64,7 @@ export default function OutfitResult() {
           width: "100%",
         }}
       >
-        <h2>
-          Generated Outfit
-        </h2>
+        <h2>Generated Outfit</h2>
 
         <div
           style={{
@@ -58,15 +76,10 @@ export default function OutfitResult() {
         >
           {outfit.upperwear && (
             <div>
-              <h3>
-                Upperwear
-              </h3>
+              <h3>Upperwear</h3>
 
               <img
-                src={
-                  outfit.upperwear
-                    .imageUrl
-                }
+                src={outfit.upperwear.imageUrl}
                 alt="upperwear"
                 width={200}
               />
@@ -75,15 +88,10 @@ export default function OutfitResult() {
 
           {outfit.bottomwear && (
             <div>
-              <h3>
-                Bottomwear
-              </h3>
+              <h3>Bottomwear</h3>
 
               <img
-                src={
-                  outfit.bottomwear
-                    .imageUrl
-                }
+                src={outfit.bottomwear.imageUrl}
                 alt="bottomwear"
                 width={200}
               />
@@ -92,32 +100,18 @@ export default function OutfitResult() {
 
           {outfit.footwear && (
             <div>
-              <h3>
-                Footwear
-              </h3>
+              <h3>Footwear</h3>
 
-              <img
-                src={
-                  outfit.footwear
-                    .imageUrl
-                }
-                alt="footwear"
-                width={200}
-              />
+              <img src={outfit.footwear.imageUrl} alt="footwear" width={200} />
             </div>
           )}
 
           {outfit.outerwear && (
             <div>
-              <h3>
-                Outerwear
-              </h3>
+              <h3>Outerwear</h3>
 
               <img
-                src={
-                  outfit.outerwear
-                    .imageUrl
-                }
+                src={outfit.outerwear.imageUrl}
                 alt="outerwear"
                 width={200}
               />
@@ -132,21 +126,9 @@ export default function OutfitResult() {
             marginTop: "2rem",
           }}
         >
-          <button
-            onClick={() =>
-              window.location.reload()
-            }
-          >
-            Retry
-          </button>
+          <button onClick={handleRetry}>Retry</button>
 
-          <button
-            onClick={() =>
-              router.push(
-                "/mainMenu"
-              )
-            }
-          >
+          <button onClick={() => router.push("/mainMenu")}>
             Return to Main Menu
           </button>
         </div>

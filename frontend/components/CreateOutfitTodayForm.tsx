@@ -4,41 +4,33 @@ import { useState } from "react";
 import { generateOutfit } from "@/services/generateOutfit";
 import { useRouter } from "next/navigation";
 
-
 export default function CreateOutfitTodayForm() {
-  const [city, setCity] =
-    useState("");
+  const [city, setCity] = useState("");
 
-    const router = useRouter();
-    
-    const handleGenerate = async () => {
-    const today =
-        new Date()
-        .toISOString()
-        .split("T")[0];
+  const router = useRouter();
 
-    const result =
-        await generateOutfit({
-        city,
-        startDate: today,
-        endDate: today,
-        });
+  const handleGenerate = async () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    const result = await generateOutfit({
+      city,
+      startDate: today,
+      endDate: today,
+    });
 
     localStorage.setItem(
-        "generatedOutfit",
-        JSON.stringify({
+      "generatedOutfit",
+      JSON.stringify({
         mode: "today",
         city,
         startDate: today,
         endDate: today,
         result,
-        })
+      }),
     );
 
-    router.push(
-        "/createOutfit/result"
-    );
-    };
+    router.push("/createOutfit/result");
+  };
   return (
     <div className="page-container">
       <div
@@ -55,22 +47,14 @@ export default function CreateOutfitTodayForm() {
             gap: "1rem",
           }}
         >
-          <h2>
-            Create Outfit
-          </h2>
+          <h2>Create Outfit</h2>
 
-          <label>
-            City
-          </label>
+          <label>City</label>
 
           <input
             type="text"
             value={city}
-            onChange={(e) =>
-              setCity(
-                e.target.value,
-              )
-            }
+            onChange={(e) => setCity(e.target.value)}
             placeholder="Leon"
           />
 
@@ -85,13 +69,9 @@ export default function CreateOutfitTodayForm() {
           />
           */}
 
-          <button onClick={handleGenerate}>
-            Generate Outfit
-            </button>
+          <button onClick={handleGenerate}>Generate Outfit</button>
         </div>
       </div>
     </div>
-    
-    
   );
 }
