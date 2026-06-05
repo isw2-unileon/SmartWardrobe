@@ -6,9 +6,9 @@ import (
 	"math/rand"
 )
 
-// Interfaces de los servicios que necesita
+// Interfaces of the services that needs
 type LocationServiceInterface interface {
-	GetLocation(city string) (*dto.LocationDto, error)
+	GetLocation(city string, country string) (*dto.LocationDto, error)
 }
 type WeatherServiceInterface interface {
 	GetWeather(location *dto.LocationDto, startDate string, endDate string) (*dto.WeatherDto, error)
@@ -46,7 +46,7 @@ func NewOutfitService(locationService LocationServiceInterface, weatherService W
 
 func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDto) (*dto.OutfitResponseDto, error) {
 	// Call the service to obtain the latitude and longitude of the city
-	location, err := s.locationService.GetLocation(req.City)
+	location, err := s.locationService.GetLocation(req.City, req.Country)
 	if err != nil {
 		fmt.Printf("error getting location: %v\n", err)
 		return nil, err
