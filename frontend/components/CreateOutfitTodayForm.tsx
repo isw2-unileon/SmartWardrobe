@@ -1,10 +1,39 @@
 "use client";
 
 import { useState } from "react";
+import { generateOutfit } from "@/services/generateOutfit";
 
 export default function CreateOutfitTodayForm() {
   const [city, setCity] =
     useState("");
+
+const handleGenerate =
+  async () => {
+    const today =
+      new Date()
+        .toISOString()
+        .split("T")[0];
+
+    const handleGenerate =
+  async () => {
+    const today =
+      new Date()
+        .toISOString()
+        .split("T")[0];
+
+    const result =
+      await generateOutfit({
+        city,
+        startDate: today,
+        endDate: today,
+      });
+
+    console.log(
+      "RESULT:",
+      result
+    );
+  };
+  };
 
   return (
     <div className="page-container">
@@ -15,29 +44,49 @@ export default function CreateOutfitTodayForm() {
           maxWidth: "500px",
         }}
       >
-        <h2>
-          Create Outfit
-        </h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+          }}
+        >
+          <h2>
+            Create Outfit
+          </h2>
 
-        <label>
-          City
-        </label>
+          <label>
+            City
+          </label>
 
-        <input
-          type="text"
-          value={city}
-          onChange={(e) =>
-            setCity(
-              e.target.value,
-            )
-          }
-          placeholder="Leon"
-        />
+          <input
+            type="text"
+            value={city}
+            onChange={(e) =>
+              setCity(
+                e.target.value,
+              )
+            }
+            placeholder="Leon"
+          />
 
-        <button>
-          Generate Outfit
-        </button>
+          {/*
+          <label>
+            Country
+          </label>
+
+          <input
+            type="text"
+            placeholder="Spain"
+          />
+          */}
+
+          <button onClick={handleGenerate}>
+            Generate Outfit
+            </button>
+        </div>
       </div>
     </div>
+    
   );
 }
