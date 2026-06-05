@@ -23,7 +23,6 @@ The repository will be divided into two main parts:
 ├── backend/    # Go server source code
 ├── frontend/   # Next.js client source code
 └── README.md
-
 ```
 
 ## Installation and local setup
@@ -32,7 +31,6 @@ The repository will be divided into two main parts:
 ```text
 git clone  <repo-url>/SmartWardrobe.git
 cd SmartWardrobe
-
 ```
 
 ### 2. Configure Environment Variables 
@@ -45,7 +43,6 @@ NEXT_PUBLIC_API_URL=http://localhost:8080
 
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-supabase-pulishable-key>
-
 ```
 
 #### Backend
@@ -58,7 +55,6 @@ SUPABASE_URL=<your-supabase-url>
 SUPABASE_JWT_SECRET=<your-supabase-jwt-secret>
 
 REMOVEBG_API_KEY=<your-removebg-api-key>
-
 ```
 
 ### 3. Install Dependencies
@@ -67,7 +63,6 @@ REMOVEBG_API_KEY=<your-removebg-api-key>
 ```text
 cd frontend
 npm install
-
 ```
 
 ### 4. Run the Backend
@@ -119,7 +114,7 @@ Branch naming convention:
 ```text
 feature/<feature-number>-<feature-name>
 bugfix/<bugfix-number>-<bugfix-name>
-hotfix/<hotfix-number>-<gotfix-name>
+hotfix/<hotfix-number>-<hotfix-name>
 ```
 
 ### 2. Commit Convention
