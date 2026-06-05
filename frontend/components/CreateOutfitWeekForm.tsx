@@ -90,7 +90,18 @@ export default function CreateOutfitWeekForm() {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-
+          {loading && (
+            <p
+              style={{
+                textAlign: "center",
+                color: "#8B6B4A",
+                fontWeight: 600,
+                margin: 0,
+              }}
+            >
+              Generating week...
+            </p>
+          )}
           <button
             onClick={handleGenerate}
             disabled={!city || !startDate || loading}

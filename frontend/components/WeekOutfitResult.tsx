@@ -96,13 +96,19 @@ export default function WeekOutfitResult() {
               >
                 <div
                   style={{
-                    border: "1px solid #B8A391",
+                    backgroundColor: "#8B6B4A",
+                    color: "white",
                     borderRadius: "12px",
                     padding: "0.5rem 1rem",
                     fontWeight: 600,
+                    width: "100%",
+                    textAlign: "center",
                   }}
                 >
-                  {day.date}
+                  {new Date(day.date).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                  })}
                 </div>
 
                 {outfit.upperwear && (
