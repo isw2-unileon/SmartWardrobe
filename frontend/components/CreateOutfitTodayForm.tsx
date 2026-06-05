@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateOutfitTodayForm() {
   const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   const router = useRouter();
 
@@ -58,7 +59,7 @@ export default function CreateOutfitTodayForm() {
             placeholder="Leon"
           />
 
-          {/*
+          
           <label>
             Country
           </label>
@@ -67,7 +68,7 @@ export default function CreateOutfitTodayForm() {
             type="text"
             placeholder="Spain"
           />
-          */}
+          
 
           <button onClick={handleGenerate}>Generate Outfit</button>
         </div>

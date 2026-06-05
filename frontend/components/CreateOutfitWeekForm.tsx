@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { generateOutfit } from "@/services/generateOutfit";
 
 export default function CreateOutfitWeekForm() {
-  const [city, setCity] = useState("Leon");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0],
@@ -82,6 +83,13 @@ export default function CreateOutfitWeekForm() {
             onChange={(e) => setCity(e.target.value)}
             placeholder="León"
           />
+          <>
+            <label>Country</label>
+            <input type="text" placeholder="Spain" />
+          </>  <>
+            <label>Country</label>
+            <input type="text" placeholder="Spain" />
+          </>
 
           <label>Start Date</label>
 
