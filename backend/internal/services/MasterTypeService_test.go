@@ -137,7 +137,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_NoTempRestriction(t 
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Camiseta", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: nil},
+		{ID: 1, Name: "T-Shirt", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: nil},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
@@ -152,7 +152,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_NoTempRestriction(t 
 	// The results are checked
 	assert.NoError(t, err)
 	assert.Len(t, result, 1)
-	assert.Equal(t, "Camiseta", result[0].Name)
+	assert.Equal(t, "T-Shirt", result[0].Name)
 
 	// Verified that the service actually called the repository
 	mockRepo.AssertExpectations(t)
@@ -164,7 +164,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_BothTempMatch(t *tes
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Abrigo", CategoryId: int64Ptr(1), MinTemp: floatPtr(5.0), MaxTemp: floatPtr(15.0)},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(1), MinTemp: floatPtr(20.0), MaxTemp: floatPtr(30.0)},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
@@ -179,7 +179,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_BothTempMatch(t *tes
 	// The results are checked
 	assert.NoError(t, err)
 	assert.Len(t, result, 1)
-	assert.Equal(t, "Abrigo", result[0].Name)
+	assert.Equal(t, "T-shirt", result[0].Name)
 
 	// Verified that the service actually called the repository
 	mockRepo.AssertExpectations(t)
@@ -191,13 +191,13 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_BothTempNoMatch(t *t
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Abrigo", CategoryId: int64Ptr(1), MinTemp: floatPtr(20.0), MaxTemp: floatPtr(30.0)},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(1), MinTemp: floatPtr(3.0), MaxTemp: floatPtr(8.0)},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
 
 	service := services.NewMasterTypeService(mockRepo)
-	weather := dto.WeatherDayDto{MaxTemp: floatPtr(10.0), MinTemp: floatPtr(5.0)}
+	weather := dto.WeatherDayDto{MaxTemp: floatPtr(25.0), MinTemp: floatPtr(18.0)}
 	category := dto.MasterCategoryDto{ID: 1}
 
 	// The function is executed
@@ -217,7 +217,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_OnlyMaxTemp(t *testi
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Camiseta", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: floatPtr(15.0)},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: floatPtr(30.0)},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
@@ -243,7 +243,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_OnlyMinTemp(t *testi
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Camiseta", CategoryId: int64Ptr(1), MinTemp: floatPtr(10.0), MaxTemp: nil},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(1), MinTemp: floatPtr(20.0), MaxTemp: nil},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
@@ -269,9 +269,9 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_MultipleTypes(t *tes
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Camiseta", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: nil},
-		{ID: 2, Name: "Abrigo", CategoryId: int64Ptr(1), MinTemp: floatPtr(5.0), MaxTemp: floatPtr(10.0)},
-		{ID: 3, Name: "Plumífero", CategoryId: int64Ptr(1), MinTemp: floatPtr(25.0), MaxTemp: floatPtr(30.0)},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(1), MinTemp: nil, MaxTemp: nil},
+		{ID: 2, Name: "Hoodie", CategoryId: int64Ptr(1), MinTemp: floatPtr(20.0), MaxTemp: floatPtr(30.0)},
+		{ID: 3, Name: "Jacket", CategoryId: int64Ptr(1), MinTemp: floatPtr(3.0), MaxTemp: floatPtr(8.0)},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
@@ -286,8 +286,8 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_MultipleTypes(t *tes
 	// The results are checked
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
-	assert.Equal(t, "Camiseta", result[0].Name)
-	assert.Equal(t, "Abrigo", result[1].Name)
+	assert.Equal(t, "T-shirt", result[0].Name)
+	assert.Equal(t, "Hoodie", result[1].Name)
 
 	// Verified that the service actually called the repository
 	mockRepo.AssertExpectations(t)
@@ -299,7 +299,7 @@ func TestMasterTypeService_GetTypesWithTempRangeAndCategory_MapsCategory(t *test
 
 	// Prepare the mock data to return
 	fakeData := []models.MasterType{
-		{ID: 1, Name: "Camiseta", CategoryId: int64Ptr(3), MinTemp: nil, MaxTemp: nil},
+		{ID: 1, Name: "T-shirt", CategoryId: int64Ptr(3), MinTemp: nil, MaxTemp: nil},
 	}
 	mockRepo.On("GetTypesByCategory", mock.Anything).
 		Return(fakeData, nil)
