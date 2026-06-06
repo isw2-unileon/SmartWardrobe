@@ -36,7 +36,7 @@ func (s *MasterTypeService) GetAll() ([]dto.MasterTypeDto, error) {
 	return typeDtos, nil
 }
 
-func (s *MasterTypeService) GetTypesWithTempRangeAndCategory(weather *dto.WeatherDto, category dto.MasterCategoryDto) ([]dto.MasterTypeDto, error) {
+func (s *MasterTypeService) GetTypesWithTempRangeAndCategory(weather dto.WeatherDayDto, category dto.MasterCategoryDto) ([]dto.MasterTypeDto, error) {
 	search := models.MasterType{
 		CategoryId: &category.ID,
 	}
@@ -49,10 +49,10 @@ func (s *MasterTypeService) GetTypesWithTempRangeAndCategory(weather *dto.Weathe
 	var typeDtos []dto.MasterTypeDto
 	for _, c := range types {
 		if (c.MinTemp == nil && c.MaxTemp == nil) ||
-			(c.MaxTemp != nil && (*c.MaxTemp) > weather.Daily.MaxTemp[0]) &&
-				(c.MinTemp != nil && (*c.MinTemp) < weather.Daily.MinTemp[0]) ||
-			(c.MinTemp == nil && c.MaxTemp != nil && (*c.MaxTemp) > weather.Daily.MaxTemp[0]) ||
-			(c.MaxTemp == nil && c.MinTemp != nil && (*c.MinTemp) < weather.Daily.MinTemp[0]) {
+			(c.MaxTemp != nil && (*c.MaxTemp) >= *weather.MaxTemp) &&
+				(c.MinTemp != nil && (*c.MinTemp) >= *weather.MinTemp) ||
+			(c.MinTemp == nil && c.MaxTemp != nil && (*c.MaxTemp) >= *weather.MaxTemp) ||
+			(c.MaxTemp == nil && c.MinTemp != nil && (*c.MinTemp) >= *weather.MinTemp) {
 			typeDtos = append(typeDtos, dto.MasterTypeDto{
 				ID:   c.ID,
 				Name: c.Name,

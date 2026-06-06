@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
 import { uploadImage } from "@/services/storage";
 import { removeBackground } from "@/services/removeBackground";
-import { analyzeClothing } from "@/services/clip";
+//import { analyzeClothing } from "@/services/clip";
 import { useRouter } from "next/navigation";
 
 export default function AddItemForm() {
@@ -13,70 +14,27 @@ export default function AddItemForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-const handleFile = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-
-    const selected =
-      e.target.files?.[0];
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
 
     if (!selected) return;
 
-    setFile(selected);preview
+    setFile(selected);
+    preview;
 
     setRemovingBg(true);
 
-    const start = Date.now();
-
     try {
-
-      const processedFile =
-        await removeBackground(selected);
-
-      // Removing background effect 
-      //---------------------------------------------
-      // const elapsed =
-      //   Date.now() - start;
-
-      // const MIN_LOADING_TIME =
-      //   1000;
-
-      // if (
-      //   elapsed <
-      //   MIN_LOADING_TIME
-      // ) {
-
-      //   await new Promise(
-      //     resolve =>
-      //       setTimeout(
-      //         resolve,
-      //         MIN_LOADING_TIME -
-      //           elapsed,
-      //       ),
-      //   );
-      // }
-      //---------------------------------------------
+      const processedFile = await removeBackground(selected);
 
       setFile(processedFile);
 
-      setPreview(
-        URL.createObjectURL(
-          processedFile,
-        ),
-      );
-
+      setPreview(URL.createObjectURL(processedFile));
     } catch (error) {
-
       console.error(error);
 
-      setPreview(
-        URL.createObjectURL(
-          selected,
-        ),
-      );
-
+      setPreview(URL.createObjectURL(selected));
     } finally {
-
       setRemovingBg(false);
     }
   };
@@ -91,18 +49,18 @@ const handleFile = async (
 
     const imageUrl = await uploadImage(formData);
 
-    const prediction = await analyzeClothing(file);
-    console.log(prediction);
+    //const prediction = await analyzeClothing(file);
 
     setLoading(false);
 
-    router.push(
-      `/addItem/Verify?` +
-      `imageUrl=${encodeURIComponent(imageUrl)}` +
-      `&color=${encodeURIComponent(prediction.color)}` +
-      `&style=${encodeURIComponent(prediction.style)}` +
-      `&type=${encodeURIComponent(prediction.type)}`
-    );
+    // router.push(
+    //   `/addItem/Verify?` +
+    //   `imageUrl=${encodeURIComponent(imageUrl)}` +
+    //   `&color=${encodeURIComponent(prediction.color)}` +
+    //   `&style=${encodeURIComponent(prediction.style)}` +
+    //   `&type=${encodeURIComponent(prediction.type)}`
+    // );
+    router.push(`/addItem/Verify?imageUrl=${encodeURIComponent(imageUrl)}`);
   };
 
   return (
@@ -183,9 +141,7 @@ const handleFile = async (
                 padding: "2rem",
               }}
             >
-              <div>
-                Removing background...
-              </div>
+              <div>Removing background...</div>
             </div>
           )}
           {preview && (

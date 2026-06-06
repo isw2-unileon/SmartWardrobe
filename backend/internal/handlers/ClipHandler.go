@@ -24,7 +24,9 @@ func (h *ClipHandler) Analyze(c *gin.Context) {
 		})
 		return
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	response, err := h.clipService.Analyze(file)
 	if err != nil {

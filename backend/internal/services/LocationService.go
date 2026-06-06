@@ -10,15 +10,22 @@ import (
 	"strings"
 )
 
-type LocationService struct{}
+type LocationService struct {
+	baseURL string
+}
 
 func NewLocationService() *LocationService {
-	return &LocationService{}
+	return &LocationService{baseURL: "https://geocoding-api.open-meteo.com/v1/search"}
+}
+
+// Used only for testing
+func NewLocationServiceWithURL(baseURL string) *LocationService {
+	return &LocationService{baseURL: baseURL}
 }
 
 func (s *LocationService) GetLocation(city string, country string) (*dto.LocationDto, error) {
 	// Obtain the coordinates of the city
-	geoURL := fmt.Sprintf("https://geocoding-api.open-meteo.com/v1/search?name=%s&count=10&format=json", url.QueryEscape(city))
+	geoURL := fmt.Sprintf("%s?name=%s&count=10&format=json", s.baseURL, url.QueryEscape(city))
 
 	resp, err := http.Get(geoURL)
 	if err != nil {

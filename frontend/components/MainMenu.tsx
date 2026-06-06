@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -201,8 +202,8 @@ export default function MainMenu({
                     style={{
                       aspectRatio: "1",
                       borderRadius: "18px",
-                      border: "2px solid #B8A391",
-                      backgroundColor: "#FCFAF7",
+                      border: "2px solid #ffffff",
+                      backgroundColor: "#ffffff",
                       overflow: "hidden",
                       cursor: "pointer",
                     }}

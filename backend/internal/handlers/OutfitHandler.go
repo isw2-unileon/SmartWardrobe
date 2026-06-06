@@ -8,7 +8,7 @@ import (
 )
 
 type OutfitService interface {
-	GenerateOutfit(dto.OutfitRequestDto, dto.UserDto) (*dto.OutfitResponseDto, error)
+	GenerateOutfit(dto.OutfitRequestDto, dto.UserDto) ([]dto.OutfitResponseDto, error)
 }
 
 type OutfitHandler struct {

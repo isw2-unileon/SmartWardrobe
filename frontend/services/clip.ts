@@ -12,7 +12,6 @@ export interface ClipPredictionResponse {
 export async function analyzeClothing(
   file: File,
 ): Promise<ClipPredictionResponse> {
-
   const cookieStore = await cookies();
 
   const supabase = createClient(cookieStore);
@@ -25,10 +24,7 @@ export async function analyzeClothing(
 
   const formData = new FormData();
 
-  formData.append(
-    "image",
-    file,
-  );
+  formData.append("image", file);
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/clothing/analyze`,
@@ -43,20 +39,13 @@ export async function analyzeClothing(
     },
   );
 
-    if (!response.ok) {
+  if (!response.ok) {
+    const errorText = await response.text();
 
-    const errorText =
-        await response.text();
+    console.log("CLIP ERROR:", errorText);
 
-    console.log(
-        "CLIP ERROR:",
-        errorText,
-    );
-
-    throw new Error(
-        errorText,
-    );
-    }
+    throw new Error(errorText);
+  }
 
   return await response.json();
 }

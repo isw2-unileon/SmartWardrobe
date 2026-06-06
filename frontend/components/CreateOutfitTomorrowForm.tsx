@@ -5,50 +5,38 @@ import { useRouter } from "next/navigation";
 import { generateOutfit } from "@/services/generateOutfit";
 
 export default function CreateOutfitTomorrowForm() {
-  const [city, setCity] =
-    useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
-  const router =
-    useRouter();
+  const router = useRouter();
 
   const handleGenerate = async () => {
-    const tomorrow =
-      new Date();
+    const tomorrow = new Date();
 
-    tomorrow.setDate(
-      tomorrow.getDate() + 1
-    );
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const tomorrowString =
-      tomorrow
-        .toISOString()
-        .split("T")[0];
+    const tomorrowString = tomorrow.toISOString().split("T")[0];
 
-    const result =
-      await generateOutfit({
-        city,
-        startDate:
-          tomorrowString,
-        endDate:
-          tomorrowString,
-      });
+    const result = await generateOutfit({
+      city,
+      country,
+      startDate: tomorrowString,
+      endDate: tomorrowString,
+    });
 
     localStorage.setItem(
       "generatedOutfit",
       JSON.stringify({
         mode: "tomorrow",
         city,
-        startDate:
-          tomorrowString,
-        endDate:
-          tomorrowString,
+        country,
+        startDate: tomorrowString,
+        endDate: tomorrowString,
         result,
-      })
+      }),
     );
 
-    router.push(
-      "/createOutfit/result"
-    );
+    router.push("/createOutfit/result");
   };
 
   return (
@@ -67,43 +55,28 @@ export default function CreateOutfitTomorrowForm() {
             gap: "1rem",
           }}
         >
-          <h2>
-            Create Outfit
-          </h2>
+          <h2>Create Outfit</h2>
 
-          <label>
-            City
-          </label>
+          <label>City</label>
 
           <input
             type="text"
             value={city}
-            onChange={(e) =>
-              setCity(
-                e.target.value
-              )
-            }
-            placeholder="Leon"
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="León"
           />
 
-          {/*
-          <label>
-            Country
-          </label>
+          <>
+            <label>Country</label>
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Spain"
+            />
+          </>
 
-          <input
-            type="text"
-            placeholder="Spain"
-          />
-          */}
-
-          <button
-            onClick={
-              handleGenerate
-            }
-          >
-            Generate Outfit
-          </button>
+          <button onClick={handleGenerate}>Generate Outfit</button>
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ export async function uploadImage(formData: FormData) {
 
   const fileName = `${Date.now()}-${file.name}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("wardrobe-images")
     .upload(fileName, file);
 

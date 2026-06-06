@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateOutfitTodayForm() {
   const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   const router = useRouter();
 
@@ -14,6 +15,7 @@ export default function CreateOutfitTodayForm() {
 
     const result = await generateOutfit({
       city,
+      country,
       startDate: today,
       endDate: today,
     });
@@ -23,6 +25,7 @@ export default function CreateOutfitTodayForm() {
       JSON.stringify({
         mode: "today",
         city,
+        country,
         startDate: today,
         endDate: today,
         result,
@@ -55,19 +58,17 @@ export default function CreateOutfitTodayForm() {
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            placeholder="Leon"
+            placeholder="León"
           />
 
-          {/*
-          <label>
-            Country
-          </label>
+          <label>Country</label>
 
           <input
             type="text"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
             placeholder="Spain"
           />
-          */}
 
           <button onClick={handleGenerate}>Generate Outfit</button>
         </div>

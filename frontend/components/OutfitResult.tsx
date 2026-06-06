@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,6 +26,8 @@ export default function OutfitResult() {
     const result = await generateOutfit({
       city: parsed.city,
 
+      country: parsed.country,
+
       startDate: parsed.startDate,
 
       endDate: parsed.endDate,
@@ -45,36 +50,34 @@ export default function OutfitResult() {
       router.push("/mainMenu");
       return;
     }
-
-    setData(JSON.parse(stored));
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
   }, [router]);
 
   if (!data) {
     return <p>Loading...</p>;
   }
-///TEMP
+  ///TEMP
   if (data.mode === "week") {
-  return (
-    <div className="page-container">
-      <div className="card">
-        <h2>
-          Weekly Outfits
-        </h2>
+    return (
+      <div className="page-container">
+        <div className="card">
+          <h2>Weekly Outfits</h2>
 
-        <p>
-          Generated:
-          {" "}
-          {data.outfits.length}
-          {" "}
-          outfits
-        </p>
+          <p>Generated: {data.outfits.length} outfits</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-const outfit =
-  data.result.outfit;
+  console.log("DATA:", data);
+
+  const outfit = data?.result?.[0]?.outfit;
+
+  if (!outfit) {
+    return <p>Outfit not found</p>;
+  }
 
   return (
     <div className="page-container">
@@ -97,8 +100,6 @@ const outfit =
         >
           {outfit.upperwear && (
             <div>
-              <h3>Upperwear</h3>
-
               <img
                 src={outfit.upperwear.imageUrl}
                 alt="upperwear"
@@ -109,8 +110,6 @@ const outfit =
 
           {outfit.bottomwear && (
             <div>
-              <h3>Bottomwear</h3>
-
               <img
                 src={outfit.bottomwear.imageUrl}
                 alt="bottomwear"
@@ -121,16 +120,12 @@ const outfit =
 
           {outfit.footwear && (
             <div>
-              <h3>Footwear</h3>
-
               <img src={outfit.footwear.imageUrl} alt="footwear" width={200} />
             </div>
           )}
 
           {outfit.outerwear && (
             <div>
-              <h3>Outerwear</h3>
-
               <img
                 src={outfit.outerwear.imageUrl}
                 alt="outerwear"
