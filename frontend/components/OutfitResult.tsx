@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,7 +10,6 @@ import { useRouter } from "next/navigation";
 import { generateOutfit } from "@/services/generateOutfit";
 
 export default function OutfitResult() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null);
 
   const router = useRouter();
@@ -50,7 +51,6 @@ export default function OutfitResult() {
       return;
     }
     if (stored) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setData(JSON.parse(stored));
     }
   }, [router]);

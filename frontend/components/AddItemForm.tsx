@@ -24,8 +24,6 @@ export default function AddItemForm() {
 
     setRemovingBg(true);
 
-    const start = Date.now();
-
     try {
       const processedFile = await removeBackground(selected);
 
