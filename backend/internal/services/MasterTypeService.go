@@ -49,10 +49,10 @@ func (s *MasterTypeService) GetTypesWithTempRangeAndCategory(weather dto.Weather
 	var typeDtos []dto.MasterTypeDto
 	for _, c := range types {
 		if (c.MinTemp == nil && c.MaxTemp == nil) ||
-			(c.MaxTemp != nil && (*c.MaxTemp) < *weather.MaxTemp) &&
-				(c.MinTemp != nil && (*c.MinTemp) < *weather.MinTemp) ||
-			(c.MinTemp == nil && c.MaxTemp != nil && (*c.MaxTemp) < *weather.MaxTemp) ||
-			(c.MaxTemp == nil && c.MinTemp != nil && (*c.MinTemp) < *weather.MinTemp) {
+			(c.MaxTemp != nil && (*c.MaxTemp) >= *weather.MaxTemp) &&
+				(c.MinTemp != nil && (*c.MinTemp) >= *weather.MinTemp) ||
+			(c.MinTemp == nil && c.MaxTemp != nil && (*c.MaxTemp) >= *weather.MaxTemp) ||
+			(c.MaxTemp == nil && c.MinTemp != nil && (*c.MinTemp) >= *weather.MinTemp) {
 			typeDtos = append(typeDtos, dto.MasterTypeDto{
 				ID:   c.ID,
 				Name: c.Name,
