@@ -55,7 +55,9 @@ export default function WeekOutfitResult() {
       return;
     }
 
-    setData(JSON.parse(stored));
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
   }, [router]);
 
   if (!data) {

@@ -61,10 +61,7 @@ export default function CreateOutfitTodayForm() {
             placeholder="León"
           />
 
-          
-          <label>
-            Country
-          </label>
+          <label>Country</label>
 
           <input
             type="text"
@@ -72,7 +69,6 @@ export default function CreateOutfitTodayForm() {
             onChange={(e) => setCountry(e.target.value)}
             placeholder="Spain"
           />
-          
 
           <button onClick={handleGenerate}>Generate Outfit</button>
         </div>

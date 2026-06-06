@@ -47,8 +47,9 @@ export default function OutfitResult() {
       router.push("/mainMenu");
       return;
     }
-
-    setData(JSON.parse(stored));
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
   }, [router]);
 
   if (!data) {
@@ -67,21 +68,13 @@ export default function OutfitResult() {
     );
   }
 
-  console.log(
-  "DATA:",
-  data
-);
+  console.log("DATA:", data);
 
- const outfit =
-  data?.result?.[0]?.outfit;
+  const outfit = data?.result?.[0]?.outfit;
 
-if (!outfit) {
-  return (
-    <p>
-      Outfit not found
-    </p>
-  );
-}
+  if (!outfit) {
+    return <p>Outfit not found</p>;
+  }
 
   return (
     <div className="page-container">
@@ -114,7 +107,6 @@ if (!outfit) {
 
           {outfit.bottomwear && (
             <div>
-
               <img
                 src={outfit.bottomwear.imageUrl}
                 alt="bottomwear"

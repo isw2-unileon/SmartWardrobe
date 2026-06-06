@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateOutfit } from "@/services/generateOutfit";
 
-
 export default function CreateOutfitTomorrowForm() {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");

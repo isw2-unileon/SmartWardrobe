@@ -3,10 +3,7 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 
-export async function removeBackground(
-  file: File,
-): Promise<File> {
-
+export async function removeBackground(file: File): Promise<File> {
   const cookieStore = await cookies();
 
   const supabase = createClient(cookieStore);
@@ -19,10 +16,7 @@ export async function removeBackground(
 
   const formData = new FormData();
 
-  formData.append(
-    "file",
-    file,
-  );
+  formData.append("file", file);
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/removeBackground`,
@@ -38,37 +32,20 @@ export async function removeBackground(
   );
 
   if (!response.ok) {
+    const error = await response.json();
 
-    const error =
-      await response.json();
-
-    throw new Error(
-      error.error ||
-      "Background removal failed",
-    );
+    throw new Error(error.error || "Background removal failed");
   }
 
-  const blob =
-    await response.blob();
+  const blob = await response.blob();
 
-  console.log(
-    "Blob size:",
-    blob.size,
-  );
+  console.log("Blob size:", blob.size);
 
-  console.log(
-    "Blob type:",
-    blob.type,
-  );
+  console.log("Blob type:", blob.type);
 
-  const processedFile =
-    new File(
-      [blob],
-      `nobg-${file.name}.png`,
-      {
-        type: "image/png",
-      },
-    );
+  const processedFile = new File([blob], `nobg-${file.name}.png`, {
+    type: "image/png",
+  });
 
   return processedFile;
 }

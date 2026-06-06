@@ -93,7 +93,7 @@ export default function CreateOutfitWeekForm() {
               onChange={(e) => setCountry(e.target.value)}
               placeholder="Spain"
             />
-          </> 
+          </>
 
           <label>Start Date</label>
 
