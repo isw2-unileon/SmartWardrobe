@@ -87,7 +87,12 @@ export default function CreateOutfitWeekForm() {
           />
           <>
             <label>Country</label>
-            <input type="text" placeholder="Spain" />
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Spain"
+            />
           </> 
 
           <label>Start Date</label>

@@ -83,7 +83,11 @@ export default function WeekOutfitResult() {
           }}
         >
           {data.outfits.map((day: any, index: number) => {
-            const outfit = day.result.outfit;
+            const outfit = day?.result?.[0]?.outfit;
+
+            if (!outfit) {
+              return null;
+            }
 
             return (
               <div
