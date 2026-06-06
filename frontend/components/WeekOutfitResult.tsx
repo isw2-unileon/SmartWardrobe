@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { generateOutfit } from "@/services/generateOutfit";
 
 export default function WeekOutfitResult() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null);
 
   const router = useRouter();
