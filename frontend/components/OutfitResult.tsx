@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,6 +26,8 @@ export default function OutfitResult() {
     const result = await generateOutfit({
       city: parsed.city,
 
+      country: parsed.country,
+
       startDate: parsed.startDate,
 
       endDate: parsed.endDate,
@@ -45,8 +50,9 @@ export default function OutfitResult() {
       router.push("/mainMenu");
       return;
     }
-
-    setData(JSON.parse(stored));
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
   }, [router]);
 
   if (!data) {
@@ -65,7 +71,13 @@ export default function OutfitResult() {
     );
   }
 
-  const outfit = data.result.outfit;
+  console.log("DATA:", data);
+
+  const outfit = data?.result?.[0]?.outfit;
+
+  if (!outfit) {
+    return <p>Outfit not found</p>;
+  }
 
   return (
     <div className="page-container">
@@ -98,7 +110,6 @@ export default function OutfitResult() {
 
           {outfit.bottomwear && (
             <div>
-
               <img
                 src={outfit.bottomwear.imageUrl}
                 alt="bottomwear"

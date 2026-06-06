@@ -32,6 +32,7 @@ export default function CreateOutfitWeekForm() {
 
       const result = await generateOutfit({
         city,
+        country,
         startDate: date,
         endDate: date,
       });
@@ -47,6 +48,7 @@ export default function CreateOutfitWeekForm() {
       JSON.stringify({
         mode: "week",
         city,
+        country,
         startDate,
         outfits,
       }),
@@ -85,8 +87,13 @@ export default function CreateOutfitWeekForm() {
           />
           <>
             <label>Country</label>
-            <input type="text" placeholder="Spain" />
-          </> 
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Spain"
+            />
+          </>
 
           <label>Start Date</label>
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -13,46 +14,27 @@ export default function AddItemForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-const handleFile = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-
-    const selected =
-      e.target.files?.[0];
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
 
     if (!selected) return;
 
-    setFile(selected);preview
+    setFile(selected);
+    preview;
 
     setRemovingBg(true);
 
-    const start = Date.now();
-
     try {
-
-      const processedFile =
-        await removeBackground(selected);
+      const processedFile = await removeBackground(selected);
 
       setFile(processedFile);
 
-      setPreview(
-        URL.createObjectURL(
-          processedFile,
-        ),
-      );
-
+      setPreview(URL.createObjectURL(processedFile));
     } catch (error) {
-
       console.error(error);
 
-      setPreview(
-        URL.createObjectURL(
-          selected,
-        ),
-      );
-
+      setPreview(URL.createObjectURL(selected));
     } finally {
-
       setRemovingBg(false);
     }
   };
@@ -159,9 +141,7 @@ const handleFile = async (
                 padding: "2rem",
               }}
             >
-              <div>
-                Removing background...
-              </div>
+              <div>Removing background...</div>
             </div>
           )}
           {preview && (

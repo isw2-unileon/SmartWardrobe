@@ -10,24 +10,14 @@ export default async function VerifyPage({
     type?: string;
   }>;
 }) {
-
-  const params =
-    await searchParams;
+  const params = await searchParams;
 
   return (
     <AddItemVerify
-      imageUrl={
-        params.imageUrl || ""
-      }
-      predictedColor={
-        params.color || ""
-      }
-      predictedStyle={
-        params.style || ""
-      }
-      predictedType={
-        params.type || ""
-      }
+      imageUrl={params.imageUrl || ""}
+      predictedColor={params.color || ""}
+      predictedStyle={params.style || ""}
+      predictedType={params.type || ""}
     />
   );
 }

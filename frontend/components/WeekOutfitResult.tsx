@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -26,6 +29,7 @@ export default function WeekOutfitResult() {
 
       const result = await generateOutfit({
         city: data.city,
+        country: data.country,
         startDate: date,
         endDate: date,
       });
@@ -54,7 +58,9 @@ export default function WeekOutfitResult() {
       return;
     }
 
-    setData(JSON.parse(stored));
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
   }, [router]);
 
   if (!data) {
@@ -82,7 +88,11 @@ export default function WeekOutfitResult() {
           }}
         >
           {data.outfits.map((day: any, index: number) => {
-            const outfit = day.result.outfit;
+            const outfit = day?.result?.[0]?.outfit;
+
+            if (!outfit) {
+              return null;
+            }
 
             return (
               <div

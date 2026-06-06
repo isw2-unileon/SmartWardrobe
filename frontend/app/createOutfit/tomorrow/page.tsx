@@ -1,9 +1,5 @@
-import CreateOutfitTomorrowForm
-  from "@/components/CreateOutfitTomorrowForm";
+import CreateOutfitTomorrowForm from "@/components/CreateOutfitTomorrowForm";
 
-export default function
-CreateOutfitTomorrowPage() {
-  return (
-    <CreateOutfitTomorrowForm />
-  );
+export default function CreateOutfitTomorrowPage() {
+  return <CreateOutfitTomorrowForm />;
 }
