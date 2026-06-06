@@ -101,7 +101,7 @@ func NewCLIPClassifier(modelDir string) (*CLIPClassifier, error) {
 		nil,
 	)
 	if err != nil {
-		imgSess.Destroy()
+		_ = imgSess.Destroy()
 		return nil, fmt.Errorf("load text encoder: %w", err)
 	}
 
@@ -154,7 +154,7 @@ func NewCLIPClassifier(modelDir string) (*CLIPClassifier, error) {
 			ort.NewShape(1, embedDim),
 		)
 		if err != nil {
-			inputTensor.Destroy()
+			_ = inputTensor.Destroy()
 			return nil, err
 		}
 
@@ -162,8 +162,8 @@ func NewCLIPClassifier(modelDir string) (*CLIPClassifier, error) {
 			[]ort.Value{ort.Value(inputTensor)},
 			[]ort.Value{ort.Value(outputTensor)},
 		); err != nil {
-			inputTensor.Destroy()
-			outputTensor.Destroy()
+			_ = inputTensor.Destroy()
+			_ = outputTensor.Destroy()
 			return nil, fmt.Errorf(
 				"text encoder for %q: %w",
 				prompt,
@@ -177,8 +177,8 @@ func NewCLIPClassifier(modelDir string) (*CLIPClassifier, error) {
 		normalize(emb)
 		c.combEmbeds[i] = emb
 
-		inputTensor.Destroy()
-		outputTensor.Destroy()
+		_ = inputTensor.Destroy()
+		_ = outputTensor.Destroy()
 	}
 
 	fmt.Printf("%d combinations ready\n", len(c.combinations))
@@ -206,7 +206,9 @@ func (c *CLIPClassifier) Classify(
 	if err != nil {
 		return nil, fmt.Errorf("create image tensor: %w", err)
 	}
-	defer inputTensor.Destroy()
+	defer func() {
+		_ = inputTensor.Destroy()
+	}()
 
 	outputTensor, err := ort.NewEmptyTensor[float32](
 		ort.NewShape(1, embedDim),
@@ -214,7 +216,9 @@ func (c *CLIPClassifier) Classify(
 	if err != nil {
 		return nil, fmt.Errorf("create output tensor: %w", err)
 	}
-	defer outputTensor.Destroy()
+	defer func() {
+		_ = outputTensor.Destroy()
+	}()
 
 	// Run image encoder inference.
 	if err := c.imageSession.Run(
@@ -304,10 +308,10 @@ func rankMap(
 // Close releases ONNX Runtime resources.
 func (c *CLIPClassifier) Close() {
 	if c.imageSession != nil {
-		c.imageSession.Destroy()
+		_ = c.imageSession.Destroy()
 	}
 	if c.textSession != nil {
-		c.textSession.Destroy()
+		_ = c.textSession.Destroy()
 	}
 }
 
