@@ -14,7 +14,7 @@ func NewWeatherService() *WeatherService {
 	return &WeatherService{}
 }
 
-func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, endDate string) (*dto.WeatherDto, error) {
+func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, endDate string) ([]dto.WeatherDayDto, error) {
 	baseURL := "https://api.open-meteo.com/v1/forecast"
 
 	// The url is build param for param
@@ -46,15 +46,20 @@ func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, end
 	}
 
 	if len(weather.Daily.Time) > 0 {
-		date := weather.Daily.Time[0]
-		max := weather.Daily.MaxTemp[0]
-		min := weather.Daily.MinTemp[0]
-
-		fmt.Printf("The weather for the day %s is: Max %.1f°C / Min %.1f°C\n", date, max, min)
+		// Convert the time obtained into a slice of days
+		var days []dto.WeatherDayDto
+		for i, date := range weather.Daily.Time {
+			days = append(days, dto.WeatherDayDto{
+				Date:    date,
+				MaxTemp: &weather.Daily.MaxTemp[i],
+				MinTemp: &weather.Daily.MinTemp[i],
+			})
+			fmt.Printf("The weather for the day %s is: Max %.1f°C / Min %.1f°C\n", date, weather.Daily.MaxTemp[i], weather.Daily.MinTemp[i])
+		}
+		return days, nil
 	} else {
 		fmt.Println("No data were found for that date.")
+		return nil, nil
 	}
-
-	return &weather, nil
 
 }

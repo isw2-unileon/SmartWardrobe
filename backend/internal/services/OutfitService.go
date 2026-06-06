@@ -11,7 +11,7 @@ type LocationServiceInterface interface {
 	GetLocation(city string, country string) (*dto.LocationDto, error)
 }
 type WeatherServiceInterface interface {
-	GetWeather(location *dto.LocationDto, startDate string, endDate string) (*dto.WeatherDto, error)
+	GetWeather(location *dto.LocationDto, startDate string, endDate string) ([]dto.WeatherDayDto, error)
 }
 
 type ClothingServiceInterface interface {
@@ -23,7 +23,7 @@ type MasterCategoriesServiceInterface interface {
 }
 
 type MasterTypeServiceInterface interface {
-	GetTypesWithTempRangeAndCategory(weather *dto.WeatherDto, category dto.MasterCategoryDto) ([]dto.MasterTypeDto, error)
+	GetTypesWithTempRangeAndCategory(weather dto.WeatherDayDto, category dto.MasterCategoryDto) ([]dto.MasterTypeDto, error)
 }
 
 type OutfitService struct {
@@ -44,7 +44,7 @@ func NewOutfitService(locationService LocationServiceInterface, weatherService W
 	}
 }
 
-func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDto) (*dto.OutfitResponseDto, error) {
+func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDto) ([]dto.OutfitResponseDto, error) {
 	// Call the service to obtain the latitude and longitude of the city
 	location, err := s.locationService.GetLocation(req.City, req.Country)
 	if err != nil {
@@ -59,40 +59,43 @@ func (s *OutfitService) GenerateOutfit(req dto.OutfitRequestDto, user dto.UserDt
 		fmt.Printf("error getting weather: %v\n", err)
 		return nil, err
 	}
-	fmt.Printf("weather: %+v\n", weather)
 
 	// Generate the parts of the outfit
-	upperwear := s.generateOutfitPart(weather, "upperwear", user)
-	if upperwear == nil {
-		return nil, fmt.Errorf("error searching the upperwear part")
+	var outfits []dto.OutfitResponseDto
+	for _, day := range weather {
+		upperwear := s.generateOutfitPart(day, "upperwear", user)
+		if upperwear == nil {
+			return nil, fmt.Errorf("error searching the upperwear part")
+		}
+
+		bottomwear := s.generateOutfitPart(day, "bottomwear", user)
+		if bottomwear == nil {
+			return nil, fmt.Errorf("error searching the bottomwear part")
+		}
+
+		footwear := s.generateOutfitPart(day, "footwear", user)
+		if footwear == nil {
+			return nil, fmt.Errorf("error searching the footwear part")
+		}
+
+		outerwear := s.generateOutfitPart(day, "outerwear", user)
+
+		outfits = append(outfits, dto.OutfitResponseDto{
+			Weather: day,
+			Outfit: dto.OutfitDto{
+				Upperwear:  upperwear,
+				Bottomwear: bottomwear,
+				Footwear:   footwear,
+				Outerwear:  outerwear,
+			},
+		})
+
 	}
 
-	bottomwear := s.generateOutfitPart(weather, "bottomwear", user)
-	if bottomwear == nil {
-		return nil, fmt.Errorf("error searching the bottomwear part")
-	}
-
-	footwear := s.generateOutfitPart(weather, "footwear", user)
-	if footwear == nil {
-		return nil, fmt.Errorf("error searching the footwear part")
-	}
-
-	outerwear := s.generateOutfitPart(weather, "outerwear", user)
-
-	outfit := dto.OutfitDto{
-		Upperwear:  upperwear,
-		Bottomwear: bottomwear,
-		Footwear:   footwear,
-		Outerwear:  outerwear,
-	}
-
-	return &dto.OutfitResponseDto{
-		Weather: *weather,
-		Outfit:  outfit,
-	}, nil
+	return outfits, nil
 }
 
-func (s *OutfitService) generateOutfitPart(weather *dto.WeatherDto, name string, user dto.UserDto) *dto.ClothingItemDto {
+func (s *OutfitService) generateOutfitPart(weather dto.WeatherDayDto, name string, user dto.UserDto) *dto.ClothingItemDto {
 	// Call the MasterCategoryService with the name to obtain the id
 	category, err := s.masterCategoriesService.GetByName(name)
 	if err != nil {
@@ -111,16 +114,18 @@ func (s *OutfitService) generateOutfitPart(weather *dto.WeatherDto, name string,
 		fmt.Printf("don't find types: %s\n", name)
 		return nil
 	}
-	randomType := types[rand.Intn(len(types))]
 
-	filters := dto.ClothingItemDto{
-		Type: &randomType,
-	}
-
-	clothes, err := s.clothingService.GetClothingItem(filters, user)
-	if err != nil {
-		fmt.Printf("error getting clothes: %s\n", name)
-		return nil
+	var clothes []dto.ClothingItemDto
+	for _, t := range types {
+		filter := dto.ClothingItemDto{
+			Type: &t,
+		}
+		clothingItem, err := s.clothingService.GetClothingItem(filter, user)
+		if err != nil {
+			fmt.Printf("error getting clothes: %s\n", name)
+			return nil
+		}
+		clothes = append(clothes, clothingItem...)
 	}
 
 	if len(clothes) == 0 {
