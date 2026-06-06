@@ -58,6 +58,7 @@ export default function WeekOutfitResult() {
     }
 
     if (stored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setData(JSON.parse(stored));
     }
   }, [router]);
