@@ -37,7 +37,9 @@ func (h *BackgroundRemoverHandler) RemoveBackground(
 		return
 	}
 
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	imageBytes, err := io.ReadAll(file)
 
