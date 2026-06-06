@@ -26,6 +26,7 @@ export default function WeekOutfitResult() {
 
       const result = await generateOutfit({
         city: data.city,
+        country: data.country,
         startDate: date,
         endDate: date,
       });

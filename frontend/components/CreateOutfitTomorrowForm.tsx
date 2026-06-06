@@ -20,6 +20,7 @@ export default function CreateOutfitTomorrowForm() {
 
     const result = await generateOutfit({
       city,
+      country,
       startDate: tomorrowString,
       endDate: tomorrowString,
     });
@@ -29,6 +30,7 @@ export default function CreateOutfitTomorrowForm() {
       JSON.stringify({
         mode: "tomorrow",
         city,
+        country,
         startDate: tomorrowString,
         endDate: tomorrowString,
         result,
@@ -67,7 +69,12 @@ export default function CreateOutfitTomorrowForm() {
 
           <>
             <label>Country</label>
-            <input type="text" placeholder="Spain" />
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Spain"
+            />
           </>
 
           <button onClick={handleGenerate}>Generate Outfit</button>

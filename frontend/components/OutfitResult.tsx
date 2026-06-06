@@ -23,6 +23,8 @@ export default function OutfitResult() {
     const result = await generateOutfit({
       city: parsed.city,
 
+      country: parsed.country,
+
       startDate: parsed.startDate,
 
       endDate: parsed.endDate,
@@ -65,7 +67,21 @@ export default function OutfitResult() {
     );
   }
 
-  const outfit = data.result.outfit;
+  console.log(
+  "DATA:",
+  data
+);
+
+ const outfit =
+  data?.result?.[0]?.outfit;
+
+if (!outfit) {
+  return (
+    <p>
+      Outfit not found
+    </p>
+  );
+}
 
   return (
     <div className="page-container">

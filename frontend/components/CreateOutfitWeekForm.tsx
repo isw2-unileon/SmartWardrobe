@@ -32,6 +32,7 @@ export default function CreateOutfitWeekForm() {
 
       const result = await generateOutfit({
         city,
+        country,
         startDate: date,
         endDate: date,
       });
@@ -47,6 +48,7 @@ export default function CreateOutfitWeekForm() {
       JSON.stringify({
         mode: "week",
         city,
+        country,
         startDate,
         outfits,
       }),

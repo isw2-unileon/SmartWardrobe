@@ -6,6 +6,8 @@ import { createClient } from "@/utils/supabase/server";
 type GenerateOutfitParams = {
   city: string;
 
+  country: string;
+
   startDate: string;
 
   endDate: string;
@@ -13,6 +15,7 @@ type GenerateOutfitParams = {
 
 export async function generateOutfit({
   city,
+  country,
   startDate,
   endDate,
 }: GenerateOutfitParams) {
@@ -48,7 +51,7 @@ export async function generateOutfit({
 
       body: JSON.stringify({
         city,
-
+        country,
         start_date:
           startDate,
 
