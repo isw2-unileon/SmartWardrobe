@@ -8,15 +8,20 @@ import (
 	"net/url"
 )
 
-type WeatherService struct{}
+type WeatherService struct {
+	baseURL string
+}
 
 func NewWeatherService() *WeatherService {
-	return &WeatherService{}
+	return &WeatherService{baseURL: "https://api.open-meteo.com/v1/forecast"}
+}
+
+// Used only for testing
+func NewWeatherServiceWithURL(baseURL string) *WeatherService {
+	return &WeatherService{baseURL: baseURL}
 }
 
 func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, endDate string) ([]dto.WeatherDayDto, error) {
-	baseURL := "https://api.open-meteo.com/v1/forecast"
-
 	// The url is build param for param
 	params := url.Values{}
 	params.Add("latitude", fmt.Sprintf("%.4f", city.Results[0].Latitude))
@@ -26,7 +31,7 @@ func (s *WeatherService) GetWeather(city *dto.LocationDto, startDate string, end
 	params.Add("start_date", startDate)
 	params.Add("end_date", endDate)
 
-	apiURL := fmt.Sprintf("%s?%s", baseURL, params.Encode())
+	apiURL := fmt.Sprintf("%s?%s", s.baseURL, params.Encode())
 
 	resp, err := http.Get(apiURL)
 	if err != nil {
